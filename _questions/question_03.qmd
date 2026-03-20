@@ -1,196 +1,45 @@
 <!-- question-type: prepare -->
-### Exercise 3: Firm Strategy: Industry, Size, and Profitability
+### Exercise 3: Create the Analysis Dataset
 
-Our objective is to create the following plots:
+In the rest of this tutorial, we will work with a dataset called `firm_strategy`.
+To create `firm_strategy`, we need to construct some variables from the ASX dataset.
 
-```{r}
-#| fig-width: 12
-#| fig-height: 8
-#| fig-align: "center"
-#| echo: false
-#| warning: false
-
-big_industries <- c("Metals & Mining", "Specialty Retail", "Construction & Engineering", 
-                    "Hotels, Restaurants & Leisure", "Oil, Gas & Consumable Fuels", 
-                    "Commercial Services & Supplies", "Food Products")
-
-scatter_ind <- 
-    firm_strategy |> 
-    filter(profit_margin > -2 & industry %in% big_industries) |> 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, fill = industry), 
-               alpha = 0.7, shape = 21, size = 3
-               ) + # shape = 21 allows filling
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Firm Strategy", 
-         x = "Asset Turnover", 
-         y = "Profit Margin") + 
-    guides(color = guide_legend(title = NULL), 
-           fill = guide_legend(title = "Industry"))
-
-scatter_size <- 
-    firm_strategy |> 
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, size = at), 
-               alpha = 0.7) +
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-                   linetype = "dashed", color = "blue", size = 1) + 
-    theme_minimal() + 
-    labs(title = "Firm Strategy", 
-             x = "Asset Turnover", 
-             y = "Profit Margin") + 
-    guides(color = guide_legend(title = NULL), 
-           size = guide_legend(title = "Assets")
-           )
-
-scatter_return <- 
-    firm_strategy %>% 
-    filter(profit_margin > -2) %>% 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, 
-                   fill = cut(roic, 
-                   breaks = 3, labels = c("Low", "Medium", "High")
-                        )
-                   ), 
-                   alpha = 0.7, shape = 21, color = "black", size = 4) + 
-        geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-                   linetype = "dashed", 
-                   color = "blue", 
-                   size = 1
-                   ) + 
-        geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-                   linetype = "dashed", 
-                   color = "blue", 
-                   size = 1
-                   ) + 
-        scale_fill_okabe_ito() +
-        theme_minimal() + 
-        labs(title = "Firm Strategy: Large Australian Public Companies (2024)", 
-             x = "Asset Turnover", 
-             y = "Profit Margin") + 
-        guides(color = guide_legend(title = NULL), 
-               fill = guide_legend(title = "ROIC")
-           )
-
-scatter_return /
-  (scatter_ind + scatter_size)
-
-```
-
-**(a).** Examine the plot below that captures how the relationship between profit margin and asset turnover varies with industry (as the code shows, this plot focuses on the 'big' industries that we covered in the lecture material). Explain how this plot is consistent with your findings in the last part of the previous question.
+**(a).** Load the ASX data located in `data/asx_200_2024.csv` into an object called `asx_data`.
 
 ```{r}
-big_industries <- c("Metals & Mining", "Specialty Retail", "Construction & Engineering", 
-                    "Hotels, Restaurants & Leisure", "Oil, Gas & Consumable Fuels", 
-                    "Commercial Services & Supplies", "Food Products")
-
-scatter_ind <- 
-    firm_strategy |> 
-    filter(profit_margin > -2 & industry %in% big_industries) |> 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, fill = industry), 
-               alpha = 0.7, shape = 21, size = 3
-               ) + # shape = 21 allows filling
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Firm Strategy", 
-         x = "Asset Turnover", 
-         y = "Profit Margin") + 
-    guides(color = guide_legend(title = NULL), 
-           fill = guide_legend(title = "Industry"))
-
-scatter_ind
+#| eval: false
+asx_data <- YOUR_CODE_HERE
 ```
 
-**(b).** Use the starter code provided below to produce a scatter plot that captures how the relationship between profit margin and asset turnover **varies with firm size** (`at`). How does this plot show differences in firm size? Explain what this plot reveals about the relationship between firm size and strategy.
+**(b).** We now want to create a new dataset called `firm_strategy` from `asx_data`.
 
-```{r, eval=FALSE}
-scatter_size <- 
-    YOUR_DATAFRAME |> 
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    YOUR_FUNCTION_NAME(aes(x = asset_turnover, y = profit_margin, 
-                           size = YOUR_VARIABLE_NAME
-                           ),  
-                       alpha = 0.7, color = "black"
-                       ) +
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    theme_minimal() + 
-    labs(title = "Firm Strategy", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL), 
-           size = guide_legend(title = "YOUR_VARIABLE_NAME")
-           )
+To do this, we need to:
 
-scatter_size
+1. keep only firms for which the ratios can be calculated sensibly, and
+2. create two new variables:
+
+   * `profit_margin`
+   * `asset_turnover`
+
+Before writing any code, look at the formulas for these variables and think about which original variables must be **strictly positive**.
+
+**(c).** Use your answer to complete the code below. Replace `YOUR_CONDITIONS` and fill in the two missing ratio definitions.
+
+```{r}
+#| eval: false
+firm_strategy <-
+    asx_data |>
+    filter(YOUR_CONDITIONS) |>
+    YOUR_CODE_HERE(
+        profit_margin = YOUR_CODE_HERE,
+        asset_turnover = YOUR_CODE_HERE
+    )
 ```
 
-**(c).** Use the starter code below to produce a scatter plot that captures how the relationship between profit margin and asset turnover **varies with firm profitability** (`roic`). Explain what this plot reveals about the relationship between firm strategy and profitability. What seems to 'hurt' firm performance more: weak margins, or weak volume?
-
-```{r, eval=FALSE}
-scatter_return <- 
-    YOUR_DATAFRAME |> 
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    YOUR_FUNCTION_NAME(aes(x = asset_turnover, y = profit_margin, 
-                           fill = cut(YOUR_VARIABLE_NAME, 
-                                      breaks = 3, labels = c("Low", "Medium", "High")
-                                      )
-                           ), 
-                       alpha = 0.7, shape = 21, color = "black", size = 4
-                       ) + 
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Firm Strategy: Large Australian Public Companies (2024)", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL), 
-           fill = guide_legend(title = "ROIC")
-           )
-
-scatter_return
-```
-
-**(d).** Write a short chunk of code that integrates the three plots you created above into a single figure. Use the `patchwork` package to do this.
-
-```{r, eval=FALSE}
-
-WRITE YOUR ANSWER HERE
-
-```
-
+**(d).** In one sentence, explain why we use `filter()` before `mutate()` in our solution to (c).
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
+
 ::: {.content-visible when-profile="r-teaching-guide"}
 
 ::: {.teaching-block}
@@ -201,42 +50,48 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 **Learning Objective** 
+🎯 **Learning Objective**
 
 Students should:
 
-- Apply `filter()`, `mutate()`, and `cut()` to transform and subset firm-level data for strategic analysis.
-- Use `ggplot2 `aesthetics (color, fill, size) to visually encode industry, firm size, and profitability.
-- Interpret median reference lines to compare strategic positioning across firms.
-- Relate patterns in asset turnover and profit margin to industry structure, firm scale, and ROIC.
+* load the original ASX dataset into R
+* recognise that a new analysis dataset is created by transforming an existing dataset
+* infer the filter conditions needed before calculating ratios
+* use `filter()` and `mutate()` together in a simple pipeline
 
-✅   **Core Concepts to Highlight**
+✅ **Core Concepts to Highlight**
 
-- `filter()` with logical conditions (`&`, `%in%`) to focus on relevant subsets (e.g., selected industries, removing outliers).
-- Mapping variables to aesthetics — `industry` to fill, `at `to size, and `roic` to categorical color using `cut()`.
-- Median lines are based on the full data set, providing a consistent benchmark across subsets.
-- Patterns partly reflect accounting mechanics (e.g., asset turnover = sales/assets) as well as strategic choices.
-- ROIC patterns show that weak margins hurt profitability more than low turnover.
+* We often create a new working dataset from a larger original dataset
+* Ratio variables require attention to their denominators
+* If a denominator is zero or negative, the resulting ratio may be undefined or misleading for this exercise
+* `filter()` keeps only the rows we want to work with
+* `mutate()` creates new variables from existing ones
+* The order of operations matters: we first keep valid rows, then calculate the new variables
 
-💬 **Suggested In-Class Prompts** (if needed)
+💬 **Suggested In-Class Prompts**
 
-NA
+* Which original variables appear in the denominators of the three ratios?
+* Why do we need to think about the denominator before calculating a ratio?
+* What problem could arise if `sale`, `at` were zero?
+* Why is it useful to save the result as a new object like `firm_strategy` rather than overwriting the original data?
 
 📌 **Common Misunderstandings**
 
-- Misreading point size or color as “better” rather than representing scale or profitability.
-- Assuming clustering is random rather than shaped by industry constraints.
-- Believing that high turnover alone drives high ROIC — ignoring the stronger impact of margins.
-- Confusing `color` and `fill` in `ggplot()` when mapping categorical variables.
+* Forgetting that the ratio conditions come from the denominators, not the numerators
+* Allowing zero values when the exercise is asking for ratios to be calculated sensibly
+* Confusing the original dataset (`asx_data`) with the new derived dataset (`firm_strategy`)
+* Thinking `mutate()` automatically removes invalid rows
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-teaching-guide -->
 
 <!-- BEGIN PROFILE:r-solutions -->
+
 ::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
 
 ::: {.solution-block}
@@ -247,113 +102,38 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a). Industry and variation in firm strategy**
-
-This plot makes it visually clear that firms in similar industries tend to (but don't strictly) cluster together in terms of their strategic orientation. For instance, Metals & Mining firms (light blue points) mostly sit to the left of the vertical dashed line (low asset turnover) and above the horizontal dashed line (high profit margin), highlighting a shared emphasis on high-margin strategies. These firms typically extract and sell high-value commodities, which generates strong margins but doesn't require high turnover.
-
-In contrast, Specialty Retail and Commercial Services & Supplies firms (pink and red points) mostly fall to the right of the vertical line and below the horizontal, indicating a high-volume strategy: they generate high sales relative to their asset base but operate on thinner margins, likely due to competitive pricing and frequent turnover.
-
-This clustering confirms that strategies are not randomly distributed—they reflect industry-level constraints and advantages, which nudge firms toward particular strategic trade-offs.
-
-What’s striking in the plot is how few industries span both sides of the median lines. Most industries cluster in only one quadrant or narrowly straddle the divide, reinforcing that industry structure heavily constrains strategic choice. For example, Food Products and Oil, Gas & Consumable Fuels firms (green and purple) are concentrated in low-margin zones, possibly due to price sensitivity or commodity input costs.
-
-This suggests that firm strategy is less about individual managerial choice and more about the logic of the industry—what's viable, sustainable, and rewarded in that competitive context. 
-
-**(b). Firm size and variation in firm strategy**
-
-Here's the updated code:
+**(a).** Load the ASX data into an object called `asx_data`.
 
 ```{r}
-scatter_size <- 
-    firm_strategy |> 
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, size = at), 
-               alpha = 0.7, color = "black"
-               ) +
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    theme_minimal() + 
-    labs(title = "Firm Strategy", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL), 
-           size = guide_legend(title = "Assets")
-           )
-
-scatter_size
+asx_data <- 
+  read_csv("data/asx_200_2024.csv")
 ```
 
-In this plot, firm size is represented by the size of each point — larger circles correspond to firms with greater total assets (`at`). The legend on the right clarifies the approximate asset values for different point sizes. This visual mapping makes it easy to compare where the largest and smallest firms sit in relation to their profit margins and asset turnover.
+**(b).** The variables that must be strictly positive are the ones in the denominators of the ratios:
 
-The plot reveals that large firms (big dots) tend to cluster in the upper-left quadrant — high profit margins but lower asset turnover. These are often capital-intensive businesses in sectors like mining, energy, and utilities, focusing on high margins per unit sold rather than rapid sales cycles. The plot shows that smaller firms (small dots) are more often in the lower-right quadrant — lower profit margins but high asset turnover, common in less-capital industries such as retail, services, and construction.
+* `sale` for `profit_margin`
+* `at` for `asset_turnover`
 
-The scarcity of large firms in the high-asset-turnover quadrants is not just strategic — it is also mechanical. Because asset turnover = sales/assets, large firms with large asset bases will generally have lower asset turnover, even if their total sales are substantial. This means that part of the pattern in the plot reflects accounting arithmetic, while another part reflects strategic orientation.
-
-**(c). Profitability and variation in firm strategy **
-
-Here's the updated code:
+**(c).** One correct completed version is:
 
 ```{r}
-scatter_return <- 
-    firm_strategy |> 
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, 
-                   fill = cut(roic, 
-                              breaks = 3, labels = c("Low", "Medium", "High")
-                              )
-                   ), 
-               alpha = 0.7, shape = 21, color = "black", size = 4
-               ) + 
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Firm Strategy: Large Australian Public Companies (2024)", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL), 
-           fill = guide_legend(title = "ROIC")
-           )
-
-scatter_return
+firm_strategy <-
+    asx_data |>
+    filter(sale > 0, at > 0) |>
+    mutate(
+        profit_margin = ebit / sale,
+        asset_turnover = sale / at
+    )
 ```
 
-The color coding makes it clear that high-ROIC firms (green) are concentrated in the top-left quadrant — high margins combined with lower asset turnover (often capital-intensive, specialized firms) — and to a lesser extent in the top-right quadrant where high margins coincide with higher sales volume. Medium-ROIC firms (orange) are spread across the upper half of the chart and into parts of the lower-right quadrant, while low-ROIC firms (red) cluster almost entirely in the bottom-left — low margins and low sales volume — a “sinking ship” position.
+**(d).** One possible answer is:
 
-From the distribution of colors, weak margins appear to hurt profitability more than low asset turnover. Even firms with high turnover but low margins (bottom-right quadrant) tend to fall into the medium-ROIC category, not the high-ROIC category. By contrast, firms with low margins and low turnover are overwhelmingly low-ROIC, while those with strong margins (even if turnover is modest) are more likely to post strong ROIC.
-
-The plot reinforces that while both dimensions matter, protecting margins is more critical for sustaining high ROIC. High-volume, low-margin strategies can produce decent results, but sustained underperformance on margins tends to push firms into the weakest profitability categories. In other words, turnover can partially offset low margins, but the reverse is often more powerful: strong margins can sustain high ROIC even when turnover is low.
-
-**(d). Integrating the three plots**
-
-Here's the updated code:
-
-```{r}
-#| fig-width: 12
-#| fig-height: 8
-#| fig-align: "center"
-
-scatter_return /
-  (scatter_ind + scatter_size)
-
-```
-
+> We use `filter()` before `mutate()` so that we only calculate the ratios for firms where the denominators are valid.
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-solutions -->

@@ -5,7 +5,8 @@
 .Rhistory
 .Rproj.user
 tutorial_student.qmd
-*cache* 
+*cache*
 *_files
 /.quarto/
 data/*
+**/*.quarto_ipynb

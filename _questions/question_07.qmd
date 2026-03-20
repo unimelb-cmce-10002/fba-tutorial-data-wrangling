@@ -1,0 +1,104 @@
+<!-- question-type: inclass -->
+### Exercise 7: Summarising the Findings for Executives
+
+Imagine you work at a large consulting company that is preparing an annual report on the financial results of Australian firms.
+
+Your team has been asked to analyse how large Australian listed firms generate strong results across different industries. As part of this project, you need to present an interim result to the executives overseeing the report.
+
+Write 3–4 sentences that could appear in the interim report's executive summary.
+
+Your summary should answer the following:
+
+1. What did you analyse?
+2. What were the main patterns you found?
+3. What is the main business lessons one should take from these results?
+
+Write for a non-technical audience and focus on the business meaning of the results.
+
+<!-- BEGIN PROFILE:r-teaching-guide -->
+
+::: {.content-visible when-profile="r-teaching-guide"}
+
+::: {.teaching-block}
+
+::: {.teaching-block-header}
+Teaching Note
+:::
+
+::: {.teaching-block-body}
+
+🎯 **Learning Objective**
+
+Students should:
+
+* translate a sequence of coding exercises into a short business-facing summary
+* distinguish between describing code and communicating findings
+* connect firm-level and industry-level results into one coherent message
+* articulate an insightful executive-facing implication rather than a generic takeaway
+
+✅ **Core Concepts to Highlight**
+
+* Good analytics communication focuses on the decision-relevant message, not the mechanics of the code
+* Students should connect the firm-level rankings from Exercise 5 with the industry-level summaries from Exercise 6
+* The key pattern is that firms and industries do not all perform well in the same way
+* Some sectors appear to rely more on high margins, while others rely more on high asset turnover
+* A strong executive takeaway is not “one strategy is best,” but that performance should be interpreted relative to the economics of the sector
+* Executive teams should be cautious about benchmarking firms using a single metric in isolation
+
+💬 **Suggested In-Class Prompts**
+
+* What is the difference between reporting a result and reporting a command?
+* What were the two clearest patterns from Exercises 5 and 6?
+* Why is it misleading to assume that every strong firm should look the same?
+* What would the executives misunderstand if they focused only on profit margin?
+* What would they miss if they focused only on asset turnover?
+* What makes an executive-summary takeaway insightful rather than generic?
+
+📌 **Common Misunderstandings**
+
+* Describing the code instead of the findings
+* Giving only one pattern instead of drawing together both the firm-level and industry-level results
+* Writing a takeaway that is too vague, such as “industries are different”
+* Assuming that higher margin is always better, or that higher turnover is always better, without considering the business model
+* Missing the more interesting implication that performance metrics need to be interpreted in context
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-teaching-guide -->
+
+<!-- BEGIN PROFILE:r-solutions -->
+
+::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
+
+::: {.solution-block}
+
+::: {.solution-block-header}
+Solution
+:::
+
+::: {.solution-block-body}
+
+Here is one strong example of the kind of answer we are aiming for.
+
+* We analysed how large Australian listed firms generate performance, focusing on profit margin and asset turnover at both the firm and industry level.
+* First, the firms with the highest profit margins were usually different from the firms with the highest asset turnover, which suggests that businesses can perform well through different operating models.
+* Second, these differences also appeared at the industry level: some industries tended to have higher average margins, while others tended to generate higher sales relative to their asset base.
+* The main business lesson is that the executives should not judge performance using a single metric in isolation. A strong firm in one sector may look very different from a strong firm in another, so benchmarking and strategic recommendations should reflect how that industry typically creates value.
+
+A weaker answer would usually miss the final point about **context** and simply say that “some firms have high margins and others have high turnover.” The stronger answer explains why that matters for executive decision-making.
+
+
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-solutions -->
+
+

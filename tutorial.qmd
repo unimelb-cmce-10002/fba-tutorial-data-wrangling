@@ -13,7 +13,7 @@ engine: knitr
 <!-- BEGIN INSERT:prepare-header -->
 ## Prepare these Exercises before Class 
 
-Prepare these exercises before coming to class. Plan to spend 60 minutes on these exercises.
+Prepare these exercises before coming to class. Plan to spend 45 minutes on these exercises.
 
 ::: {.callout-important title = "Switch on the `eval` flag when you want to evaluate code!"}
 In the R code chunks below we have provided starter code for you to work from.
@@ -30,6 +30,8 @@ Switch the `eval` value to `true` when you want the R code within a chunk to be 
 
 {{< include _questions/question_03.qmd >}}
 
+{{< include _questions/question_04.qmd >}}
+
 
 <!-- BEGIN INSERT:inclass-header -->
 ## In-Class Exercises
@@ -37,6 +39,11 @@ Switch the `eval` value to `true` when you want the R code within a chunk to be 
 You will discuss these exercises in class with your peers in small groups and with your tutor. These exercises build from the exercises you have prepared above, you will get the most value from the class if you have completed those above before coming to class.
 <!-- END INSERT:inclass-header -->
 
-{{< include _questions/question_04.qmd >}}
 
 {{< include _questions/question_05.qmd >}} 
+
+{{< include _questions/question_06.qmd >}} 
+
+{{< include _questions/question_07.qmd >}} 
+
+{{< include _questions/question_08.qmd >}} 
