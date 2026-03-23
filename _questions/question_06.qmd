@@ -1,0 +1,191 @@
+<!-- question-type: inclass -->
+### Exercise 6: Comparing Industries Using Average Values
+
+In Exercise 5, you compared individual firms at the top of the profit margin and asset turnover distributions.
+We now take a step back and look at broader patterns across industries.
+To do this, we will group the data by `industry` and calculate average values for each group.
+
+**(a).** Complete the code below to create a summary table that shows, for each industry:
+
+* the number of firms
+* average `profit_margin`
+* average `asset_turnover`
+
+```{r}
+#| eval: false
+industry_summary <-
+    firm_strategy |>
+    group_by(YOUR_VARIABLE) |>
+    summarise(
+        n_firms = n(),
+        avg_profit_margin = mean(YOUR_VARIABLE, na.rm = TRUE),
+        avg_asset_turnover = YOUR_CODE
+    )
+```
+
+**(b).** Now focus only on industries with at least 3 firms, and sort `industry_summary` from highest to lowest average `profit_margin`.
+
+```{r}
+#| eval: false
+industry_summary |>
+    filter(YOUR_CONDITION) |>
+    arrange(YOUR_CODE)
+```
+
+**(c).** Which industries appear near the top of the table when sorted by average `profit_margin`? What does this suggest about how firms in these industries tend to make money?
+
+**(d).** Again focusing only on industries with at least 3 firms, sort `industry_summary` from highest to lowest average `asset_turnover`.
+
+```{r}
+#| eval: false
+industry_summary |>
+    YOUR_CODE |>
+    YOUR_CODE
+```
+
+**(e).** Compare the two rankings. How do these industry-level patterns comapre to what you saw earlier in Exercise 5, where different kinds of firms appeared in the high-margin and high-turnover tables?
+
+**(f).** In this exercise, we focused on industries with at least 3 firms. Why might that be useful? And even after doing this, why might an average still give a slightly misleading picture of an industry?
+
+**(g).** In this exercise, we focused on industry averages. Another summary measure analysts often use is the **standard deviation**, which tells us how spread out the firms in an industry are. What do you think it would mean if an industry had:
+
+* a **high** standard deviation in `profit_margin`?
+* a **low** standard deviation in `profit_margin`?
+
+<!-- BEGIN PROFILE:r-teaching-guide -->
+
+::: {.content-visible when-profile="r-teaching-guide"}
+
+::: {.teaching-block}
+
+::: {.teaching-block-header}
+Teaching Note
+:::
+
+::: {.teaching-block-body}
+
+🎯 **Learning Objective**
+
+Students should:
+
+* use `group_by()` and `summarise()` to calculate group-level averages
+* understand that grouped summaries help us move from individual firms to broader industry patterns
+* interpret average profit margin, asset turnover, and ROIC at the industry level
+* connect industry-level averages to the firm-level patterns they observed in Exercise 5
+
+✅ **Core Concepts to Highlight**
+
+* `group_by(industry)` splits the data into industry groups
+* `summarise()` calculates one row of summary statistics for each group
+* `n()` counts the number of firms in each industry
+* `mean(..., na.rm = TRUE)` calculates the average while ignoring missing values
+* Industry averages show typical patterns, but they do not tell us everything about variation within industries
+* Comparing rankings by average margin and average turnover helps students see that industries can differ in their business models
+
+💬 **Suggested In-Class Prompts**
+
+* What changes when we move from firm-level tables to industry-level summaries?
+* Why is `n_firms` useful to include in the table?
+* Why might we want to focus on industries with at least 3 firms before comparing averages?
+* Even with `n_firms >= 3`, why might an average still hide important differences within an industry?
+* In plain language, what does a high standard deviation tell us about an industry?
+* What does a low standard deviation tell us?
+* Which industries appear to be more margin-driven on average?
+* Which appear to be more turnover-driven on average?
+* Why might some industries rank highly on one measure but not the other?
+
+📌 **Common Misunderstandings**
+
+* Forgetting to group by `industry` before summarising
+* Using the wrong variable inside the `mean()` function
+* Thinking `summarise()` keeps all original rows rather than collapsing each group into one row
+* Interpreting industry averages as if every firm in the industry must look the same
+* Ignoring that averages based on very small numbers of firms may be less informative
+* Thinking that an industry average fully describes all firms in that industry
+* Not recognising that two industries can have the same average but very different levels of spread
+
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-teaching-guide -->
+
+<!-- BEGIN PROFILE:r-solutions -->
+
+::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
+
+::: {.solution-block}
+
+::: {.solution-block-header}
+Solution
+:::
+
+::: {.solution-block-body}
+
+**(a).** Create a summary table by industry.
+
+```{r}
+industry_summary <-
+    firm_strategy |>
+    group_by(industry) |>
+    summarise(
+        n_firms = n(),
+        avg_profit_margin = mean(profit_margin, na.rm = TRUE),
+        avg_asset_turnover = mean(asset_turnover, na.rm = TRUE)
+    )
+```
+
+**(b).** Focus on industries with at least 3 firms and sort from highest to lowest average `profit_margin`.
+
+```{r}
+industry_summary |>
+    filter(n_firms >= 3) |>
+    arrange(desc(avg_profit_margin))
+```
+
+**(c).**
+
+* Industries near the top of the `avg_profit_margin` ranking include **Building Products**, **Interactive Media & Services**, **Insurance**, **Software**, and **Financial Services**.
+* These industries may be able to earn more profit from each dollar of sales because they rely less on very high sales volume and more on pricing power, specialised products or services, scale economies in intangible activities, or business models where a larger share of revenue can be retained as profit.
+* This suggests that firms in these industries often succeed by earning relatively high margin on each sale rather than by generating extremely high turnover.
+
+**(d).** Again focusing on industries with at least 3 firms, sort from highest to lowest average `asset_turnover`.
+
+```{r}
+industry_summary |>
+    filter(n_firms >= 3) |>
+    arrange(desc(avg_asset_turnover))
+```
+
+**(e).**
+
+* The industries near the top of the `avg_asset_turnover` ranking include **Consumer Staples Distribution & Retail**, **Construction & Engineering**, **Specialty Retail**, **Broadline Retail**, and **Professional Services**.
+* These sectors often generate large sales relative to their asset base because they depend more on high volume, fast-moving goods or projects, service delivery models that generate substantial revenue without a very large stock of physical assets, or operational models built around turning assets into revenue quickly.
+* The two rankings are different, which suggests that industries vary in how firms generate performance.
+* The firm-level differences seen earlier reflect broader industry patterns in how sectors operate.
+* It is also useful to notice that some industries, such as **Professional Services** and **Commercial Services & Supplies**, perform reasonably well on both dimensions, which suggests that not every industry fits neatly into only one strategy type.
+
+**(f).** One possible interpretation is:
+
+* Focusing on industries with at least 3 firms helps reduce the risk of over-interpreting averages based on only one or two companies.
+* Even after doing this, an average can still be misleading if firms within the industry differ a lot from one another or if one unusual firm pulls the average up or down.
+* This is why averages are useful, but they do not tell us everything about the full distribution of firms within an industry.
+
+**(g).** One possible interpretation is:
+
+* A **high** standard deviation in `profit_margin` would mean that firms in the industry differ a lot in how much profit they earn from each dollar of sales.
+* A **low** standard deviation in `profit_margin` would mean that firms in the industry are more similar to one another on this measure.
+* This means that two industries could have similar average profit margins but very different amounts of variation across firms.
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-solutions -->
+
+

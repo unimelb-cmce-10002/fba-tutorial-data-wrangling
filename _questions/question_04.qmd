@@ -1,71 +1,41 @@
-<!-- question-type: inclass -->
-### Exercise 4: Identifying and removing outliers to improve the profit margin histogram
+<!-- question-type: prepare -->
+### Exercise 4: Create a Smaller Checking Dataset
 
-In exercise 1, we created the following plot:
+We have now created a new dataset called `firm_strategy`.
+Before moving on, it is good practice to check that the new variables were created correctly.
+One useful way to do this is to create a smaller dataset that contains only the variables we need for checking.
+
+**(a).** Create a new object called `firm_strategy_check` that keeps only the following variables:
+
+* `conml`
+* `ebit`
+* `at`
+* `sale`
+* `profit_margin`
+* `asset_turnover`
 
 ```{r}
-#| fig-width: 8
-#| fig-height: 6
-#| fig-align: "center"
-#| echo: false
-#| warning: false
-
-firm_strategy |>
-    ggplot(aes(x = profit_margin)) + 
-    geom_histogram(fill = "darkorange", color = "black", 
-                 alpha = 0.7, bins = 100) +
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024",  
-             x = "Profit Margin",  
-             y = "Frequency") +  
-    theme_minimal() 
+#| eval: false
+firm_strategy_check <-
+  firm_strategy |>
+  YOUR_FUNCTION(YOUR_VARIABLES)
 ```
 
-**(a).** We have two extreme observations in the left tail of our distribution. Create a short, narrow table that isolates these observations and shows only the sub-set of variables that relate to profit margin and asset turnover. Using this table, explains why these firms have such extreme (negative) profit margins. Use the starter code below to create and display such a table.
 
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>
-    YOUR_FUNCTION_NAME(YOUR_VARIABLE_NAME) |>
-    YOUR_FUNCTION_NAME(2) |>
-    YOUR_FUNCTION_NAME(conml, industry, ebit, at, sale, profit_margin, asset_turnover)
+**(b).** Display the first 10 rows of `firm_strategy_check`. You may find the command `slice_head(n = 10)` helpful here.
+
+```{r}
+#| eval: false
+firm_strategy_check |>
+  YOUR_CODE
 ```
 
-**(b).** These extreme observations badly drag out our distribution’s left tail, and so compress our visualization of the rest of the distribution (i.e., the vast majority of firms in our sample are pushed into a single column even though there is much variation in these firms' profit margins). Use the starter code below to remove these outliers from our sample and then create a basic histogram that visualizes the distribution of profit for our ‘pruned’ sample.
+**(c).** Why might it be useful to create a smaller checking dataset instead of inspecting the full `firm_strategy` dataset?
 
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>
-    YOUR_FUNCTION_NAME(YOUR_VARIABLE_NAME > YOUR_LOWER_BOUND_VALUE) |>
-    YOUR_FUNCTION_NAME(aes(x = YOUR_VARIABLE_NAME)) + 
-    YOUR_FUNCTION_NAME(fill = "darkorange", color = "black", 
-                       alpha = 0.7, bins = 100
-                       ) +  
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024", 
-         x = YOUR_LABEL, 
-         y = YOUR_LABEL
-         ) + 
-    theme_minimal() 
-```
-
-**(c).** Hmm! Explain whether you think the plot above effectively visualizes the distribution of profit margin for large Australian public companies. Do we still have extreme observations in our left tail? How do these affect what we can learn about the majority of firms, which exhibit profit margins >= 0?
-
-**(d).** Use the starter code below to further ‘prune’ our sample and so again visualize the distribution of profit margin for large Australian public companies. Do we now get a better sense of our how profit margin is distributed across large Australian companies?
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>
-    YOUR_FUNCTION_NAME(YOUR_VARIABLE_NAME > YOUR_HIGHER_LOWER_BOUND_VALUE) |>
-    YOUR_FUNCTION_NAME(aes(x = YOUR_VARIABLE_NAME)) + 
-    YOUR_FUNCTION_NAME(fill = "darkorange", color = "black", 
-                       alpha = 0.7, bins = 100
-                       ) +  
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024", 
-         x = YOUR_LABEL, 
-         y = YOUR_LABEL
-         ) + 
-    theme_minimal() 
-```
-
-**(e).** Using the plot produced above, what would you consider to be the typical large Australian company’s profit margin? What would you consider a high-margin firm to be? Explain why it is not possible for the distribution of profit margin to have a very long right tail (i.e., firms that enjoy extremely large profit margins)?
+**(d).** Looking at a few rows is a useful first step, but it might not scale well to a large dataset where we compute hundreds of variables. What might be a more scalable next step if you wanted to check whether `profit_margin` and `asset_turnover` look reasonable across all firms?
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
+
 ::: {.content-visible when-profile="r-teaching-guide"}
 
 ::: {.teaching-block}
@@ -76,47 +46,49 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 **Learning Objective** 
+🎯 **Learning Objective**
 
 Students should:
 
-- Use `arrange()` and `head()` to identify extreme observations in a dataset.
-- Apply `filter()` to trim or exclude outliers for clearer data visualization.
-- Understand how extreme values can distort histograms and hide variation in the main body of the data.
-- Interpret histograms to identify “typical” values and define high/low extremes in context.
+* use `select()` to create a smaller dataset for checking work
+* use `slice_head()` to inspect a manageable number of rows
+* understand why analysts often reduce a dataset before checking calculated variables
+* explain why row-level inspection is only a first check and why more scalable summary-based checks are useful
 
-✅   **Core Concepts to Highlight**
+✅ **Core Concepts to Highlight**
 
-- Outliers in profit margin often result from very small sales denominators — especially in early-stage firms — causing disproportionately large negative values.
-- Even after trimming, a few extreme cases can stretch the x-axis and compress the visible range where most observations lie.
-- Narrowing the x-axis range or further filtering allows bins to better represent the true variation in the main cluster.
-- Profit margins have a natural ceiling (EBIT ≤ sales) limiting the right tail, but the left tail can extend far due to near-zero sales.
+* Checking work is an important part of data analysis
+* A smaller dataset can make inspection easier by removing irrelevant columns
+* `select()` reduces the columns to just the variables we need
+* `slice_head()` helps us inspect a small number of rows without printing the full dataset
+* Looking at a few rows is a useful first check, but larger datasets often require summary-based checks as well
 
-💬 **Suggested In-Class Prompts** (if needed)
+💬 **Suggested In-Class Prompts**
 
-"After running arrange(profit_margin) and inspecting the top/bottom rows, what do you notice about sales for these extreme cases?"
-
-"How does changing the filter threshold in filter(profit_margin > X) affect the shape of the histogram?"
-
-"Where would you place the “typical” firm’s profit margin in the trimmed histogram, and what industries might dominate that range?"
-
-"Why can the left tail be extremely long, but the right tail cannot?"
+* Why is it often easier to inspect a narrow table than a full dataset?
+* Which original variables do we need to check `profit_margin`?
+* Which original variables do we need to check `asset_turnover`?
+* Why might we inspect a few rows first instead of all rows at once?
+* What could we do next if we wanted a more scalable check across all firms?
+* What does this exercise teach us about good analytical workflow?
 
 📌 **Common Misunderstandings**
 
-- Believing extreme negative margins always indicate poor operational performance, rather than an arithmetic effect of small denominators.
-- Assuming histograms always show the “true” spread without considering the influence of scale compression.
-- Forgetting that trimming or zooming in on a histogram is not “cheating” — it’s a way to make the distribution informative for the bulk of observations.
-- Misinterpreting the absence of a long right tail as evidence that high margins are rare for purely economic reasons, rather than due to the EBIT ≤ sales constraint.
+* Thinking that checking work means printing the entire dataset
+* Forgetting to keep the original variables needed to verify the new ratios
+* Treating `slice_head()` as a way to summarise the data rather than just inspect a few observations
+* Giving vague answers about “checking” without suggesting a more scalable next step such as summary statistics
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-teaching-guide -->
 
 <!-- BEGIN PROFILE:r-solutions -->
+
 ::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
 
 ::: {.solution-block}
@@ -127,84 +99,33 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a). Isolating and examining outliers**
-
-Here's the updated code:
+**(a).** Create a new object called `firm_strategy_check` that keeps only the listed variables.
 
 ```{r}
-firm_strategy |>
-  arrange(profit_margin) |>
-  head(2) |>
-  select(conml, industry, ebit, at, sale, profit_margin, asset_turnover)
+firm_strategy_check <-
+    firm_strategy |>
+    select(conml, ebit, at, sale, profit_margin, asset_turnover)
 ```
 
-This table shows how profit margin can appear extreme when sales are very small. For both firms listed, modest operating losses are divided by near-zero revenue, producing huge negative margins that don’t necessarily reflect worse underlying performance. Such cases are common in early-stage resource firms and can heavily distort the left tail of the profit-margin distribution, compressing the range where most firms fall.
-
-**(b).   Trimming outliers to improve histogram**
-
-Here's the updated code:
+**(b).** Display the first 10 rows.
 
 ```{r}
-firm_strategy |>
-  filter(profit_margin > -897) |>
-  ggplot(aes(x = profit_margin)) + 
-  geom_histogram(fill = "darkorange", color = "black", 
-                 alpha = 0.7, bins = 100
-                 ) +  
-  labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024", 
-       x = "Profit Margin", 
-       y = "Frequency"
-       ) + 
-  theme_minimal() 
+firm_strategy_check |>
+    slice_head(n = 10)
 ```
 
-**(c).  Extreme observations are still compressing our histogram**
+**(c).** One possible answer is:
 
-The plot does show the overall distribution of profit margins, but it’s not especially effective for understanding where most firms actually sit. We can see that there are still a handful of extreme left-tail observations — with profit margins far below zero — that stretch the x-axis. 
+> A smaller checking dataset makes it easier to focus only on the variables needed to verify the new calculations.
 
-Because these extreme values dominate the scale, the bulk of the distribution (where most firms cluster at or above 0% profit margin) is still compressed into a narrow band on the right, making it hard to distinguish variation among the majority of companies. In practical terms, these outliers obscure differences between profitable firms and those with only slightly negative margins, limiting the insights we can gain about typical firm performance.
+**(d).** One possible answer is:
 
-For a clearer view of most companies, it would be better to either zoom in on the main cluster-e.g., trimming more of the extreme left tail-so that the common range of profit margins is more visually informative.
-
-**(d).   More heavily trimming outliers to improve histogram**
-
-Here's the updated code:
-
-```{r, warning=FALSE}
-firm_strategy |>
-  filter(profit_margin > -2) |>
-  ggplot(aes(x = profit_margin)) + 
-  geom_histogram(fill = "darkorange", color = "black", 
-                 alpha = 0.7, bins = 100
-                 ) +  
-  labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024", 
-       x = "Profit Margin", 
-       y = "Frequency"
-       ) + 
-  theme_minimal() 
-```
-
-By narrowing the x-axis range, this plot provides a much clearer and more informative picture of the distribution of profit margins for large ASX companies. In the earlier version, extreme negative outliers stretched the scale so much that the vast majority of firms—those with margins between roughly 0 and 1—were compressed into a tiny space, making it hard to see variation within that range.
-
-Here, by excluding those extreme left-tail observations, the bins are more evenly distributed across the range where most firms lie. This prevents many companies from being lumped into a single bin and instead reveals meaningful differences in profitability within the main cluster. As a result, we can distinguish small but important shifts in margins around zero, rather than having them visually obscured by a few extreme cases.
-
-**(e). Interpreting the profit margin histogram** 
-
-From the above plot, the typical large Australian company appears to have a profit margin clustered just above zero, most likely in the range of 5%–15%. This reflects a healthy but moderate profitability level common among established public firms.
-
-A high-margin firm in this context would be one with margins of 30% or more, which is relatively rare in the data set. Such firms tend to operate in industries with high pricing power, low variable costs, and barriers to competitor entry such as strong intellectual property protection, allowing them to convert a large share of revenue into profit.
-
-It is not possible for the distribution to have a very long right tail because profit margin is calculated as
-
-$$
-\mathrm{Profit\ Margin} = \frac{\mathrm{EBIT}}{\mathrm{Sales}}
-$$
-
-Profit margin is right censored because EBIT by definition cannot exceed sales (a firm cannot make more operating profit than it earns in revenue). This imposes a hard upper bound on profit margin, unlike the left tail, where sales can approach zero while losses remain large, producing extreme negative values when firms operate at a heavy loss.
+> A more scalable next step would be to create summary statistics for the new variables so we can check their overall patterns and identify unusual or extreme values.
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-solutions -->

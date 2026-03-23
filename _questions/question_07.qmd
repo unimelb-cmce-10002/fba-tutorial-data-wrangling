@@ -1,0 +1,116 @@
+<!-- question-type: inclass -->
+### Exercise 7: Summarising the Findings for Executives
+
+Imagine you work at a large consulting company that is preparing an annual report on the financial results of Australian firms.
+
+Your team has been asked to analyse how large Australian listed firms generate strong results across different industries. As part of this project, you need to present an interim result to the executives overseeing the report.
+
+Write 3–4 sentences that could appear in the interim report's executive summary.
+
+Your summary should answer the following:
+
+1. What did you analyse?
+2. What were the main patterns you found?
+3. What is the main business lessons one should take from these results?
+
+Write for a non-technical audience and focus on the business meaning of the results.
+
+<!-- BEGIN PROFILE:r-teaching-guide -->
+
+::: {.content-visible when-profile="r-teaching-guide"}
+
+::: {.teaching-block}
+
+::: {.teaching-block-header}
+Teaching Note
+:::
+
+::: {.teaching-block-body}
+
+🎯 **Learning Objective**
+
+Students should:
+
+* translate a sequence of coding exercises into a short business-facing summary
+* distinguish between describing code and communicating findings
+* connect firm-level and industry-level results into one coherent message
+* articulate an insightful executive-facing implication rather than a generic takeaway
+
+✅ **Core Concepts to Highlight**
+
+* Good analytics communication focuses on the decision-relevant message, not the mechanics of the code
+* Students should connect the firm-level rankings from Exercise 5 with the industry-level summaries from Exercise 6
+* The key pattern is that firms and industries do not all perform well in the same way
+* Some sectors appear to rely more on high margins, while others rely more on high asset turnover
+* A strong executive takeaway is not “one strategy is best,” but that performance should be interpreted relative to the economics of the sector
+* Executive teams should be cautious about benchmarking firms using a single metric in isolation
+
+💬 **Suggested In-Class Prompts**
+
+* What is the difference between reporting a result and reporting a command?
+* What were the two clearest patterns from Exercises 5 and 6?
+* Why is it misleading to assume that every strong firm should look the same?
+* What would the executives misunderstand if they focused only on profit margin?
+* What would they miss if they focused only on asset turnover?
+* What makes an executive-summary takeaway insightful rather than generic?
+
+📌 **Common Misunderstandings**
+
+* Describing the code instead of the findings
+* Giving only one pattern instead of drawing together both the firm-level and industry-level results
+* Writing a takeaway that is too vague, such as “industries are different”
+* Assuming that higher margin is always better, or that higher turnover is always better, without considering the business model
+* Missing the more interesting implication that performance metrics need to be interpreted in context
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-teaching-guide -->
+
+<!-- BEGIN PROFILE:r-solutions -->
+
+::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
+
+::: {.solution-block}
+
+::: {.solution-block-header}
+Solution
+:::
+
+::: {.solution-block-body}
+
+Here is one strong example of the kind of answer we are aiming for.
+
+> We analysed how the 200 largest ASX-listed firms generate performance, focusing on profit margin and asset turnover across industries.
+>
+> Industries tend to generate strong performance in one of two ways. Some — such as mining, building products, and software — earn a large share of each sales dollar as profit, often because of pricing power, scarce resources, or the economics of scaling intangible products. Others — such as retail, construction, and distribution — generate large sales relative to their asset base by operating at high volume or through asset-light business models. A small number of industries, such as professional services, perform reasonably well on both.
+>
+> The main business lesson is that performance metrics need to be interpreted in the context of how an industry creates value. Benchmarking firms or setting targets using a single metric in isolation, without accounting for industry structure, risks drawing misleading conclusions and directing strategy in the wrong direction.
+
+**A strong answer will include all four of these elements. Use this checklist when reviewing student responses:**
+
+- [ ] Identifies what was analysed and names specific industries as examples
+- [ ] Notes that industries differ on margin vs. turnover, **and gives economic reasoning for why** — e.g. pricing power / scarce resources / intangible scale for high-margin industries; volume / asset-light models for high-turnover industries
+- [ ] **Notes that the tradeoff is a tendency, not a universal rule** — e.g. professional services performs reasonably well on both
+- [ ] Closes with a specific, actionable executive takeaway — **not just "don't use one metric" but "metrics must be interpreted relative to how that industry creates value"**
+
+**A weaker answer typically:**
+
+- [ ] Describes the code or process rather than the findings
+- [ ] Names the pattern without explaining the economic reasoning behind it
+- [ ] Ends with a vague takeaway that does not guide executive action
+- [ ] Misses the nuance that the tradeoff is not universal across all industries
+
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-solutions -->
+
+

@@ -4,13 +4,6 @@
 #| warning: false
 #| echo: false
 library(tidyverse)
-library(ggplot2)
-library(scales) 
-library(ggokabeito)
-library(ggthemes) 
-library(patchwork) 
-library(stringr)
-library(RColorBrewer)
 ```
 
 ```{r}
@@ -30,40 +23,42 @@ destfile <- "data/asx_200_2024.csv"
 if (!file.exists(destfile)) {
   download.file(url, destfile, mode = "wb")
 }
-# Load the data
-asx_200_2024 <- read_csv(destfile)
 ```
 
 ### The Topic: Understanding firm strategy in the Australian economy {.unnumbered}
 
-In the lecture, we examined the level of firms’ profits and the efficiency with which firms use investors’ capital to produce these profits (i.e., returns as a measure of profitability). However, we have yet to examine variation in 'how' firms produce profits. Broadly speaking, firms can pursue one of two strategies. Firms can employ a high-margin, low-volume strategy, or a low-margin, high-volume strategy. The former rely on pricing power or operational efficiencies that drive down costs in order to produce more profit per unit of good or services sold. The latter rely on scaling up operations and distribution in order to sell at very high volumes goods or services that provide much less profit per unit.
+Firms can generate strong results in different ways. One firm may earn a lot of profit from each dollar of sales. Another may earn less on each sale, but generate very high sales relative to the assets it uses. These are different ways of operating, and they often reflect differences in business model and industry structure.
 
-We calculate a firm's profit margin as follows:
+In this tutorial, we focus on two measures:
 
 $$
 \mathrm{Profit\ Margin} = \frac{\mathrm{EBIT}}{\mathrm{Sales}}
 $$
 
-Firms that effectively employ a high-margin, low-volume strategy have high profit margins (i.e., these firms generate more profit from each dollar of sales).
-
-We calculate a firm’s asset turnover as follows:
-
 $$
 \mathrm{Asset\ Turnover} = \frac{\mathrm{Sales}}{\mathrm{Assets}}
 $$
 
-Firms that effectively employ a low-margin, high-volume strategy have high asset turnover (i.e., these firms generate more sales from a given asset base).
+These measures help us think about two different dimensions of performance:
 
-In the following exercises we will explore research questions such as the following: 
+* **Profit margin** tells us how much profit a firm earns from each dollar of sales
+* **Asset turnover** tells us how effectively a firm turns its asset base into sales
 
-- How does firm strategy vary by firm size and industry? 
-- Do we observe companies that successfully maintain high margins and high volumes, and if so, which types of companies fall into this category? 
-- Do we observe the inverse-i.e., companies that suffer from low margins and low volume? 
-- And, perhaps most importantly, how does firm strategy relate to profitability?
+Using `dplyr`, we will create these variables, check that they were calculated correctly, and then use them to answer a series of business questions.
+
+In particular, we will ask:
+
+* Which firms appear strongest on **profit margin**, and which appear strongest on **asset turnover**?
+* Do the same firms appear at the top of both rankings, or do different firms succeed in different ways?
+* When we move from individual firms to industries, do the same patterns still appear?
+* Do some industries seem to rely more on **high margins**, while others rely more on **high turnover**?
+* What do these patterns suggest about how executives should interpret firm performance?
+
+By the end of the tutorial, you should be able to use `dplyr` to turn raw accounting data into a short executive-style summary of how firms and industries generate strong results.
 
 ### The Data: Financial Statement Observations from Yahoo Finance{.unnumbered}
 
-To answer these questions, we draw on audited 2024 financial statements for the 200 largest ASX-listed firms (as measured by assets). This data set should be familiar to you from the lecture.  
+To answer these questions, we draw on audited 2024 financial statements for the 200 largest ASX-listed firms (as measured by assets).
 
 Financial statements provide a standardised snapshot of a company’s performance and financial health. In our data set, the key variables are:  
 
@@ -72,91 +67,15 @@ Financial statements provide a standardised snapshot of a company’s performanc
 - Profit (`ebit`) – earnings before interest and taxes, representing core business profit after expenses (from the income statement)  
 - Assets (`at`) – the total resources the company owns that have economic value (from the balance sheet)  
 - Invested Capital (`invested_capital`) – the total capital invested in the company by both shareholders and debt holders to fund operations and growth. It generally includes:  
-  - Equity (`shareequity`) – the funds contributed by shareholders plus retained earnings  
-  - Interest-bearing debt (`dlc`, `dltt`, `dvp`) – loans and borrowings the company uses for financing
 
 By working with these statements and variables, we can replicate the kind of assessments that professional analysts and fund managers use to guide billion-dollar investment decisions.  
 
-As you will see, just a few lines of R code can wrangle raw financial statements information into orderly data that we can effectively visualize.
+As you will see, just a few lines of R code can wrangle raw financial statements information into orderly data summaries that allow us to understand how businesses across different industry sectors perform across various metrics.
 
-**From this:**
-
-```{r}
-#| echo: false 
-asx_200_2024 %>%
-    head(10)
-```
-
-**To this:**
-
-```{r}
-#| fig-width: 6
-#| fig-height: 6
-#| fig-align: "center"
-#| echo: false
-#| warning: false
-
-firm_strategy <- 
-    asx_200_2024 %>%
-    # Drop observations where we would have to divide by zero when calculating our new variables
-    filter(invested_capital > 0 & at > 0 & sale > 0) %>% 
-    mutate(
-        roic = ebit/invested_capital,
-        profit_margin = ebit/sale,
-        asset_turnover = sale/at
-        )
-
-firm_strategy %>% 
-    filter(profit_margin > -2) %>% 
-    ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, 
-                   fill = cut(roic, 
-                   breaks = 3, labels = c("Low", "Medium", "High")
-                        )
-                   ), 
-                   alpha = 0.7, shape = 21, color = "black", size = 4) + 
-        geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-                   linetype = "dashed", 
-                   color = "blue", 
-                   size = 1
-                   ) + 
-        geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-                   linetype = "dashed", 
-                   color = "blue", 
-                   size = 1
-                   ) + 
-        scale_fill_okabe_ito() +
-        theme_minimal() + 
-        labs(title = "Firm Strategy: Large Australian Public Companies (2024)", 
-             x = "Asset Turnover", 
-             y = "Profit Margin") + 
-        guides(color = guide_legend(title = NULL), 
-               fill = guide_legend(title = "ROIC"))
-```
-## Loading the Data
-
-### R packages for today {.unnumbered}
+## R packages for today {.unnumbered}
 
 ```{r}
 #| eval: false
 library(tidyverse)     # collection of packages for data manipulation and visualization
-library(scales)        # for formatting and transforming axis scales
-library(ggokabeito)    # color blind friendly color palette — this course's default
-library(ggthemes)      # additional ggplot themes for polished, publication-ready plots
-library(patchwork)     # for combining multiple ggplots into one figure
-library(stringr)       # for working with strings using consistent functions
-library(RColorBrewer) # color palette
 ```
 
-### Loading the Data in R {.unnumbered}
-
-```{r}
-#| warning: false
-#| eval: false
-#| echo: true
-#| label: load-asx-data
-#| cache: true
-
-asx_200_2024 <-
-    read_csv("data/asx_200_2024.csv")
-```

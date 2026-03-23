@@ -1,149 +1,34 @@
 <!-- question-type: prepare -->
-### Exercise 1: Visualizing the distributions of profit margin and asset turnover
+### Exercise 1: Meet the Main `dplyr` Verbs
 
-Our objective is to create the following plots: 
+In this tutorial, we will use a small set of `dplyr` verbs to build variables, inspect data, rank firms, and compare industries.
 
-```{r}
-#| fig-width: 8
-#| fig-height: 8
-#| fig-align: "center"
-#| echo: false
-#| warning: false
+Before we start coding, it helps to know what each verb is designed to do.
 
-firm_strategy <- 
-    asx_200_2024 |>
-    filter(invested_capital > 0 & at > 0 & sale > 0) |> 
-    mutate(
-        roic = ebit / invested_capital,
-        profit_margin = ebit / sale,
-        asset_turnover = sale / at
-        )
+**(a).** Match each `dplyr` verb below to its plain-English meaning.
 
-asset_turnover_hist <- 
-    firm_strategy |> 
-    ggplot(aes(x = asset_turnover)) + 
-    geom_histogram(fill = "skyblue", color = "black", 
-                   alpha = 0.7, bins = 100
-                   ) +
-    labs(title = "Distribution of Asset Turnover for Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Frequency"
-         ) + 
-    theme_minimal()
+| Verb          | Meaning                                      |
+| ------------- | -------------------------------------------- |
+| `filter()`    | A. Create a new variable                     |
+| `mutate()`    | B. Sort the rows                             |
+| `select()`    | C. Keep only the rows that match a condition |
+| `arrange()`   | D. Keep only the columns you want            |
+| `slice_max()` | E. Keep the top rows based on a variable     |
+| `group_by()`  | F. Split the data into groups                |
+| `summarise()` | G. Collapse many rows into summary measures  |
 
-profit_margin_hist <- 
-    firm_strategy |>
-    filter(profit_margin > -2) |>
-    ggplot(aes(x = profit_margin)) + 
-    geom_histogram(fill = "darkorange", color = "black", 
-                   alpha = 0.7, bins = 100
-                   ) +  
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024", 
-       x = "Profit Margin", 
-       y = "Frequency"
-       ) + 
-    theme_minimal() 
+**(b).** For each business task below, write the `dplyr` verb that best fits the task.
 
-asset_turnover_hist / profit_margin_hist
-```
-
-**(a).** Before creating these plots yourself, let's think about what we can learn from them. Based on the figure above, what is the profit margin of the typical firm in our sample? How about asset turnover? Given what you know about the types of firm strategy, how do you expect a firm's position in profit margin distribution to relate to its position in the asset turnover distribution?
-
-**(b).** Let's get started on building these plots. First, we need to create two new variables-`profit_margin`, and `asset_turnover`-and store these in a new data frame (which we will use for the rest of this week's exercises). As we did in the lecture, we will also create our measure of firm profitability-`roic`-so that we can study returns in subsequent exercises. Use the starter code below to create these variables. Replace `FUNCTION_NAME` and `YOUR_VARIABLE_NAME` with the appropriate function and variable names.
-
-```{r, eval=FALSE}
-firm_strategy <- 
-    asx_200_2024 |>
-    # Drop observations where we would have to divide by zero when calculating our new variables
-    FUNCTION_NAME(invested_capital > 0 & at > 0 & sale > 0) |>
-    # Create new variables
-    FUNCTION_NAME(
-        roic = YOUR_VARIABLE_NAME / YOUR_VARIABLE_NAME,
-        profit_margin = YOUR_VARIABLE_NAME / YOUR_VARIABLE_NAME,
-        asset_turnover = YOUR_VARIABLE_NAME / YOUR_VARIABLE_NAME
-        )
-```
-
-**(c).** Next, we want to check that we have correctly created these new variables, `profit_margin`, and `asset_turnover`. To do so, create a short, narrow table that focuses on these variables and their components for a small subset of firms in our sample (in this case, the first 10 observations). Using this table, we can then visually check that each variable is calculated as per the formula above. Use the starter code below to create and display such a table. Replace `YOUR_DATAFRAME_NAME` and `YOUR_FUNCTION_NAME` with the appropriate data frame and function names.
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME_NAME |>
-    YOUR_FUNCTION_NAME(conml, ebit, at, sale, profit_margin, asset_turnover) |>
-    YOUR_FUNCTION_NAME(10) 
-```
-
-Your table should look like this:
-
-```{r, echo=FALSE}
-firm_strategy |>
-    select(conml, ebit, at, sale, profit_margin, asset_turnover) |>
-    head(10) 
-```
-
-**(d).** Now, we can plot `profit_margin`, and `asset_turnover` and see how they behave for our sample of firms. To do so, we will first create a basic histogram that visualizes the distribution of `profit_margin`. Use the starter code below to produce this plot. Replace `YOUR_DATAFRAME_NAME`, `YOUR_FUNCTION_NAME` and `YOUR_VARIABLE` with the appropriate data frame, function, and variable names.
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME_NAME |>
-    YOUR_FUNCTION_NAME(aes(x = YOUR_VARIABLE)) + 
-    YOUR_FUNCTION_NAME(fill = "darkorange", color = "black", 
-                       alpha = 0.7, bins = 100) +
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024",  
-         x = YOUR_LABEL,  
-         y = YOUR_LABEL
-         ) +  
-    theme_minimal() 
-```
-
-Your plot should look like this:
-
-```{r, echo=FALSE, warning=FALSE}
-firm_strategy |>
-    ggplot(aes(x = profit_margin)) + 
-    geom_histogram(fill = "darkorange", color = "black", 
-                   alpha = 0.7, bins = 100) +
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024",  
-         x = "Profit Margin",  
-         y = "Frequency"
-         ) +  
-    theme_minimal() 
-```
-
-**(e).** Oops! Examining this histogram plot, what issue do you notice with the data that complicates plotting the distribution of `profit_margin`? How do you suggest we address this issue in the data, and what do we gain and lose by doing so?
-
-
-**(f).** Now, let's move on to our other new variable. Let's create a basic histogram that visualizes the distribution of `asset_turnover`. Use the starter code below to produce this plot. Replace `YOUR_DATAFRAME_NAME`, `YOUR_FUNCTION_NAME` and `YOUR_VARIABLE` with the appropriate data frame, function, and variable names.
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME_NAME |>
-    YOUR_FUNCTION_NAME(aes(x = YOUR_VARIABLE)) + 
-    YOUR_FUNCTION_NAME(fill = "skyblue", color = "black", 
-                       alpha = 0.7, bins = 100
-                       ) +
-    labs(title = "Distribution of Asset Turnover for Sample of Large ASX Companies in 2024", 
-         x = YOUR_LABEL,  
-         y = YOUR_LABEL
-         ) +  
-    theme_minimal()
-```
-
-Your plot should look like this:
-
-```{r, echo=FALSE, warning=FALSE}
-
-firm_strategy |> 
-  ggplot(aes(x = asset_turnover)) + 
-  geom_histogram(fill = "skyblue", color = "black", 
-                 alpha = 0.7, bins = 100) +
-  labs(title = "Distribution of Asset Turnover for Sample of Large ASX Companies in 2024", 
-       x = "Asset Turnover", 
-       y = "Frequency") + 
-  theme_minimal()
-  
-```
-
-**(g).** This looks better! Examining the plot above, explain why we don't have the issue that complicated plotting the distribution of profit margin.
+1. Keep only firms with positive sales and positive assets
+2. Create a new variable called `profit_margin`
+3. Show only company name, sales, and profit margin
+4. Sort firms from highest to lowest profit margin
+5. Keep the five firms with the highest asset turnover
+6. Set up the data so that each industry is analysed separately
+7. Calculate the average ROIC for each industry
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
+
 ::: {.content-visible when-profile="r-teaching-guide"}
 
 ::: {.teaching-block}
@@ -154,40 +39,47 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 **Learning Objective** 
+🎯 **Learning Objectives**
 
 Students should:
 
-- Understand what profit margin and asset turnover measure, how they differ, and how they relate to firm strategy (high-volume vs. high-margin).
-- Interpret histograms of financial ratios, recognising how outliers affect scale and resolution.
-- Apply key `dplyr` verbs — `select()`, `filter()`, `mutate()`, and `arrange()` — to calculate and explore profit margin and asset turnover.
-- Make informed choices about handling outliers (filtering, winsorising) and explain the trade-offs between clarity and completeness in analysis.
+* recognize the main `dplyr` verbs used in this tutorial
+* connect each verb to the kind of task it performs in a data workflow
+* distinguish between verbs that filter rows, select columns, create variables, sort data, group data, and summarise data
 
-✅   **Core Concepts to Highlight**
+✅ **Core Concepts to Highlight**
 
-- Profit margin mechanics: small denominators (sales) + possible negative numerators (profit) can “blow up” ratios and create extreme outliers.
-- Asset turnover mechanics: both numerator (sales) and denominator (assets) are generally non-negative and the latter is rarely close to zero, leading to fewer extreme values.
-- Censoring patterns: asset turnover is left-censored at zero; profit margin is right-censored at one.
-- Visualisation impact: outliers stretch axes, compressing the bulk of the data and making the main pattern hard to see.
+* `filter()` keeps rows that meet a condition
+* `mutate()` creates or changes variables
+* `select()` keeps chosen columns
+* `arrange()` sorts rows
+* `slice_max()` returns the highest rows according to a variable
+* `group_by()` prepares the data for grouped analysis
+* `summarise()` collapses many rows into summary statistics
 
-💬 **Suggested In-Class Prompts** (if needed)
+💬 **Suggested In-Class Prompts**
 
-NA
+* Which of these verbs changes the number of rows in the data?
+* Which of these verbs changes the number of columns?
+* What is the difference between sorting rows and keeping only the top rows?
+* Why does `group_by()` often need another verb after it to be useful?
 
 📌 **Common Misunderstandings**
 
-- Thinking all outliers are “bad” data — some may reflect genuine and important business cases.
-- Believing that removing outliers is always the “right” solution — it depends on the research goal.
-- Forgetting that ratio volatility is often a denominator problem, not just a numerator problem.
+* Confusing `filter()` and `select()` because both reduce the data, but in different ways
+* Confusing `arrange()` and `slice_max()` because both can be used when looking for high values
+* Thinking `group_by()` produces a final answer on its own, rather than setting up a later step such as `summarise()`
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-teaching-guide -->
 
 <!-- BEGIN PROFILE:r-solutions -->
+
 ::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
 
 ::: {.solution-block}
@@ -198,92 +90,32 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a). Profit margin, asset turnover, and firm strategy**
+Here is one set of correct answers.
 
-A histogram of asset turnover tells us how efficient the typical firm in a sample is at generating sales from a given asset base. For our sample, the typical firm has an asset turnover of ~0.5-1.0. A histogram of asset turnover also tells us how much variation there is in how efficiently firms in a sample generate sales from a given asset base. For our sample, we observe that firms are fairly spread out across the distribution with some notable outliers in the right tail (i.e., firms that have asset turnover > 2).
+**(a).** Match each `dplyr` verb below to its plain-English meaning.
 
-A histogram of profit margin tells us how much profit the typical firm in a sample makes per dollar of sales. For our sample, the typical firm has a profit margin of ~0.2. A histogram of profit margin also tells us how much variation there is in firms' profit margin. For our sample, we observe that firms are fairly tightly clustered between 0.1-0.2 suggesting most firms operate on tight margins. That said, we observe outliers in both the left tail and the right tail (i.e., loss-making firms with large negative margins and highly profitable firms with exceptional margins).
+* `filter()` → C. Keep only the rows that match a condition
+* `mutate()` → A. Create a new variable
+* `select()` → D. Keep only the columns you want
+* `arrange()` → B. Sort the rows
+* `slice_max()` → E. Keep the top rows based on a variable
+* `group_by()` → F. Split the data into groups
+* `summarise()` → G. Collapse many rows into summary measures
 
-In the high volume vs. high margin strategic framework, we’d expect a firm’s position in the asset turnover distribution (volume measure) to relate inversely to its position in the profit margin distribution (margin measure). High-volume firms compete on efficiency and scale: fast-moving goods, low prices, large customer base. And so, often display high asset turnover (sales per unit of assets is high) but low operating margins (less profit per dollar of sales). In contrast, high-margin firms, compete on differentiation, brand, and exclusivity: fewer transactions but each at a higher profit. And so, often display low asset turnover (lower sales relative to assets) but high operating margins.
+**(b).** For each business task below, write the `dplyr` verb that best fits the job.
 
-**(b). Starter code with correct function and variable names**
-
-Here's the updated code:
-
-```{r}
-firm_strategy <- 
-    asx_200_2024 |>
-    filter(invested_capital > 0 & at > 0 & sale > 0) |>
-    mutate(
-        roic = ebit / invested_capital, 
-        profit_margin = ebit / sale,
-        asset_turnover = sale / at
-        )
-```
-
-**(c). The short, narrow table to show new variables**
-
-Here's the updated code:
-
-```{r}
-firm_strategy |>
-    select(conml, ebit, at, sale, profit_margin, asset_turnover) |>
-    head(10) 
-```
-
-**(d).  Profit margin histogram **
-
-Here's the updated code:
-
-```{r}
-#| warning: false
-
-firm_strategy |>
-    ggplot(aes(x = profit_margin)) + 
-    geom_histogram(fill = "darkorange", color = "black", 
-                   alpha = 0.7, bins = 100
-                   ) +
-    labs(title = "Distribution of Profit Margin for Sample of Large ASX Companies in 2024",  
-         x = "Profit Margin",  
-         y = "Frequency"
-         ) +  
-    theme_minimal()
-```
-
-**(e).  Stretching outliers and squeezed histograms**
-
-The histogram of profit margin shows a very long left tail, with a few firms having very negative profit margins. The presence of these extreme outliers stretches the x-axis scale, compressing the rest of our sample into a single bin. This is an issue because we are not able to see how profit margins vary for the vast majority of firms in our sample-i.e., we lose resolution in the region where most data points fall. In other words, the outliers dominate the scale, and the bulk of the distribution looks compressed and uninformative.
-
-For purely mechanical reasons, outliers are an issue for a variable such as profit margin. Because the denominator (sales) can be small and the numerator (profit) can be negative, profit margin can easily 'blow up'. When sales are tiny, a moderate loss leads to a very large negative ratio. These values create long left tails, making the histogram compress most observations into a tiny vertical slither at the right tail.
-
-One way to address this issue is to remove or cap extreme outliers before plotting. For example, we could filter out observations where profit margin is below a certain threshold (e.g., −10), or we could winsorise the data by replacing extreme values with the nearest acceptable cutoff. The benefits of doing is that it allows us to see the bulk of the distribution more clearly, as we can focus on the region where most firms fall. The downside is that we lose information about the extreme values, which may be important for understanding certain firms' strategies or financial health. The trade-off is between clarity of the main pattern and completeness of the extreme cases.
-
-**(f).  Asset turnover histogram **
-
-Here's the updated code:
-
-```{r}
-#| warning: false
-
-firm_strategy |> 
-    ggplot(aes(x = asset_turnover)) + 
-    geom_histogram(fill = "skyblue", color = "black", 
-                   alpha = 0.7, bins = 100
-                   ) +
-    labs(title = "Distribution of Asset Turnover for Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Frequency"
-         ) + 
-    theme_minimal()
-```
-
-**(g).  Lower bounds, well-behaved ratios, and 'nice' histograms **
-
-With asset turnover, both the numerator (sales) and denominator (assets) are (effectively) non-negative by definition in standard financial statements. Even if a firm has unusually low assets, the ratio usually stays within a few multiples of the median — extreme values can happen, but they’re relatively rare (and they can only occur in the right tail). This means the histogram’s x-axis won’t get too stretched, so the main cluster of firms remains readable. So the difference is: Asset turnover - denominators are generally large and positive → fewer severe outliers. Profit margin - denominators can be small or near zero → extreme negative ratios → much worse axis compression.
+1. Keep only firms with positive sales and positive assets → `filter()`
+2. Create a new variable called `profit_margin` → `mutate()`
+3. Show only company name, sales, and profit margin → `select()`
+4. Sort firms from highest to lowest profit margin → `arrange()`
+5. Keep the five firms with the highest asset turnover → `slice_max()`
+6. Set up the data so that each industry is analysed separately → `group_by()`
+7. Calculate the average ROIC for each industry → `summarise()`
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-solutions -->

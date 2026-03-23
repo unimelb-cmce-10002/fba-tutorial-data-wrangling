@@ -1,167 +1,44 @@
 <!-- question-type: inclass -->
-### Exercise 5: Unpacking the Profit Margin-Asset Turnover Scatterplot
+### Exercise 5: Which Firms Rely Most on Margin? Which Rely Most on Volume?
 
-In exercise 2, we created the following plot:
+Some firms generate strong profits from each dollar of sales. Others generate large sales from a given asset base. In this exercise, we compare firms at the top of each of these two dimensions.
+
+**(a).** Use `slice_max()` to identify the five firms with the highest `profit_margin`.
+
+Your table should include:
+
+* `conml`
+* `industry`
+* `ebit`
+* `at`
+* `sale`
+* `profit_margin`
+* `asset_turnover`
 
 ```{r}
-#| fig-width: 8
-#| fig-height: 6
-#| fig-align: "center"
-#| echo: false
-#| warning: false
-
-# To improve our visualization, we need to focus on representative 
-# firms and drop outliers (see exercises 1 & 4 for more)
+#| eval: false
 firm_strategy |>
-    filter(profit_margin > -2) |> 
-    ggplot() + 
-    geom_point(aes(y = profit_margin, x = asset_turnover), 
-                   alpha = 0.3
-               ) + 
-    # Add a vertical line to show median value
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    # Add a horizontal line to show median value
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) +  
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-             x = "Asset Turnover", 
-             y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL))
+    slice_max(YOUR_CODE_HERE) |>
+    select(YOUR_VARIABLES_HERE)
 ```
 
-**(a).** Refer to the above plot. Firms that employ a 'high margin' strategy are located in which quadrant? Firms that employ which strategy are located in the bottom-right quadrant?
+**(b).** Now produce the equivalent table for the five firms with the highest `asset_turnover`.
 
-**(b).** One way to ‘check’ your answers to the above question is to use color to identify each firm’s strategy type. Use the starter code below and explain what the plot reveals.
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME |> 
-    YOUR_FUNCTION_NAME(profit_margin > -2) |> 
-    YOUR_FUNCTION_NAME() + 
-    YOUR_FUNCTION_NAME(aes(x = YOUR_VARIABLE_NAME, y = YOUR_VARIABLE_NAME, 
-                           fill = YOUR_VARIABLE_NAME
-                           ), 
-                       alpha = 0.7, shape = 21, size = 3, color = "black"
-                      ) + 
-    geom_vline(xintercept = median(YOUR_DATAFRAME$YOUR_VARIABLE_NAME, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(YOUR_DATAFRAME$YOUR_VARIABLE_NAME, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-             x = YOUR_LABEL, 
-             y = YOUR_LABEL
-         ) + 
-    guides(color = guide_legend(title = NULL), 
-           fill = guide_legend(title = YOUR_LABEL))
+```{r}
+#| eval: false
+firm_strategy |>
+    slice_max(YOUR_CODE_HERE) |>
+    select(YOUR_VARIABLES_HERE)
 ```
 
-**(c).** Run the first block of code provided below. Which firm from the plot above does this code identify? Run the second block of code provided below. And, which firm from the plot above does this code identify?
+**(c).** Compare the two tables.
 
-```{r, eval=FALSE}
-firm_strategy |> 
-    filter(strategy_type == 'High volume') |>
-    arrange(profit_margin) |>
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic) |>
-    head(1)
-```
-
-```{r, eval=FALSE}
-firm_strategy |> 
-      filter(strategy_type == 'High margin') |>
-      arrange(asset_turnover) |>
-      select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic) |>
-      head(1)
-```
-
-**(d).** The plots above show that some strategy types are more common than others among our sample of large ASX companies in 2024. Use the starter code below that provides the count of observations for each strategy type in our sample. Which strategy type is more common, high margin or high volume?
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>
-    YOUR_FUNCTION_NAME(profit_margin > -2) |>
-    group_by(YOUR_VARIABLE_NAME) |>
-    YOUR_FUNCTION_NAME(obs = n())
-```
-
-**(e).** Let’s dig down into one of these firm strategy types, High margin. Write and run a chunk of code that counts the number of firms from each industry that employ a high-margin strategy. Write your code such that it outputs a table that shows the five industries with the highest counts. Which industry accounts for the most high-margin firms in our sample?
-
-```{r, eval=FALSE}
-WRITE YOUR ANSWER HERE
-```
-
-**(f).** Now, write and run a chunk of code that produces the equivalent table but for firms that employ a high-volume strategy. Compare this table to the one you produced in the previous question.
-
-```{r, eval=FALSE}
-WRITE YOUR ANSWER HERE
-```
-
-**(g).** In the lecture, we examined firms from the ASX’s ‘big industries’ (i.e., the seven industries that account from more than half of all large listed firms in Australia). Let’s gain some insight into how strategy type varies within each of these big industries. Use the starter code below to produce a stacked bar plot that shows the share of each industry’s firms that employ a given strategy type. What are the main insights that this plot reveals? Which industries have the most variation in strategy type? The least?
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>  
-    # Use %in% for filtering industries
-    YOUR_FUNCTION(profit_margin > -2 & industry %in% big_industries) |>
-    # Group by both industry and strategy_type
-    group_by(YOUR_VARIABLE_NAME, YOUR_VARIABLE_NAME) |>  
-    # Count the number of occurrences for each strategy_type within each industry
-    YOUR_FUNCTION_NAME(count = n(), .groups = 'drop') |>  
-    # Map 'industry' to x-axis and 'strategy_type' to fill
-    ggplot(aes(x = YOUR_VARIABLE_NAME, y = YOUR_VARIABLE_NAME, fill = YOUR_VARIABLE_NAME)) +  
-    geom_bar(stat = "identity") +
-    theme_minimal() +  
-    # Rotate and align x-axis labels
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),  
-          # Remove the legend title
-          legend.title = element_blank()
-          ) +
-    # Wrap x-axis labels at width 10 characters
-    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +  
-    # Use color palette for filling
-    scale_fill_okabe_ito() +  
-    labs(#No label for x-axis
-         x = NULL,
-         y = "No. of Firms",
-         title = "Strategy Type Across Large Australia Comapnies in 2024: The 'Big' Industries"
-         )  
-```
-
-Your plot should look like this:
-
-```{r, echo=FALSE, warning=FALSE}
-firm_strategy |>  
-    # Use %in% for filtering industries
-    filter(profit_margin > -2 & industry %in% big_industries) |> 
-    # Group by both industry and strategy_type
-    group_by(industry, strategy_type) |>  
-    # Count the number of occurrences for each strategy_type within each industry
-    summarize(count = n(), .groups = 'drop') |>  
-    # Map 'industry' to x-axis and 'strategy_type' to fill
-    ggplot(aes(x = industry, y = count, fill = strategy_type)) +  
-    geom_bar(stat = "identity") +  
-    theme_minimal() +  
-    # Rotate and align x-axis labels
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),  
-          # Remove the legend title
-          legend.title = element_blank()
-          ) +  
-    # Wrap x-axis labels at width 10 characters
-    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +  
-    scale_fill_okabe_ito() +
-    labs(#No label for x-axis
-         x = NULL,
-         y = "No. of Firms",
-         title = "Strategy Type Across Large Australia Comapnies in 2024: The 'Big' Industries"
-         ) 
-```
+* Do the same firms appear in both tables?
+* What kinds of industries seem more common in each table?
+* What does this suggest about different ways firms generate profits?
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
+
 ::: {.content-visible when-profile="r-teaching-guide"}
 
 ::: {.teaching-block}
@@ -172,42 +49,50 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 **Learning Objective** 
+🎯 **Learning Objective**
 
 Students should:
 
-- Verify classifications visually using `ggplot2` scatterplots with medians as cut-offs.
-- Identify extreme performers via `filter()` and `arrange()`.
-- Summarise and compare strategy counts across industries with `group_by()` and `summarize()`.
+* use `slice_max()` to identify firms at the top of a chosen variable
+* compare firms that perform strongly on different dimensions of strategy
+* interpret the difference between high profit margin and high asset turnover in business terms
+* recognise that firms can generate strong performance in different ways
 
-✅   **Core Concepts to Highlight**
+✅ **Core Concepts to Highlight**
 
-- Plots validate classification and make patterns visible.
-- Industry representation can reflect both strategic tendencies and data set composition.
-- Some industries show diverse strategies; others are concentrated in one type.
+* `slice_max()` keeps the rows with the highest values of a chosen variable
+* `profit_margin` and `asset_turnover` capture different dimensions of firm strategy
+* high profit margin means earning more profit per dollar of sales
+* high asset turnover means generating more sales from a given asset base
+* comparing the two tables helps students see that firms can succeed through different business models
 
-💬 **Suggested In-Class Prompts** (if needed)
+💬 **Suggested In-Class Prompts**
 
-“Why use medians instead of means for quadrant boundaries?”
-
-“What would you change in the pipeline to find the three highest-margin firms?”
-
-“Why might Metals & Mining appear in both high-margin and high-volume categories?”
+* What is the difference between being high-margin and high-volume?
+* Do you expect the same firms to appear in both tables? Why or why not?
+* Which industries seem more common among high-margin firms?
+* Which industries seem more common among high-turnover firms?
+* Why might mining or utilities produce higher margins than retail or distribution?
+* Why might retail, services, or engineering produce higher turnover than mining or utilities?
+* What does this comparison suggest about different ways of generating profits?
 
 📌 **Common Misunderstandings**
 
-- Confusing high volume with high total sales instead of high asset turnover.
-- Assuming quadrant assignment is fixed over time.
-- Overlooking industry size effects when interpreting strategy counts.
+* Thinking that firms with high profit margins must also have high asset turnover
+* Forgetting that `slice_max()` keeps rows rather than sorting the entire dataset
+* Interpreting profit margin and asset turnover as the same kind of performance measure
+* Focusing only on firm names and not on broader industry patterns
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-teaching-guide -->
 
 <!-- BEGIN PROFILE:r-solutions -->
+
 ::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
 
 ::: {.solution-block}
@@ -218,147 +103,41 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a). Using quadrants to identify firm strategy type** 
-
-High-margin firms are in the top-left quadrant, while high-volume firms are in the bottom-right quadrant.
-
-**(b). Using `fill =` to verify firm strategy types** 
-
-Here's the updated code:
-
-```{r}
-firm_strategy |> 
-  filter(profit_margin > -2) |> 
-  ggplot() + 
-    geom_point(aes(x = asset_turnover, y = profit_margin, fill = strategy_type), 
-               alpha = 0.7, shape = 21, size = 3, color = "black"
-               ) + 
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-                   linetype = "dashed", color = "blue", size = 1
-               ) + 
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-                   linetype = "dashed", color = "blue", size = 1
-               ) + 
-    scale_fill_okabe_ito() +
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-        ) + 
-    guides(color = guide_legend(title = NULL), 
-              fill = guide_legend(title = "Strategy Type"))
-```
-
-The color coding helps to visually distinguish between the different strategy types. The plot confirms that high-margin firms are in the top-left quadrant, while high-volume firms are in the bottom-right quadrant. The plot shows that Sinking Ships are in the bottom-left quadrant, and Superstars are in the top-right quadrant.
-
-**(c). Filtering to find observations from plots** 
-
-The high-volume strategy firm (Star Entertainment) that has the lowest profit margin-i.e., the 'southern-most' high-volume firm in the plot above:
-
-```{r}
-firm_strategy |> 
-    filter(strategy_type == 'High volume') |>
-    arrange(profit_margin) |>
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic) |>
-    head(1)
-```
-
-The high-margin firm (Jupiter Mines) that has the lowest volume:
-
-```{r}
-firm_strategy |> 
-    filter(strategy_type == 'High margin') |>
-    arrange(asset_turnover) |>
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic) |>
-    head(1)
-```
-
-**(d). Strategy types that are most common and least common in our sample** 
-
-Here's the updated code:
+**(a).** Use `slice_max()` to identify the five firms with the highest `profit_margin`.
 
 ```{r}
 firm_strategy |>
-    filter(profit_margin > -2) |>
-    group_by(strategy_type) |>
-    summarize(obs = n())
+    slice_max(profit_margin, n = 5) |>
+    select(conml, industry, profit_margin, asset_turnover)
 ```
 
-The most common strategy type in our (trimmed) sample is 'High volume', with 60 firms. The least common type is 'Sinking ship', with 31 firms. Poor-performing firms—especially those in the Sinking ship quadrant—are the most likely to face financial distress or exit the market. This fits with the economic logic we discussed: persistent low margins and asset turnover erode returns and make it hard to compete. Over time, these firms either adapt their strategy (shift quadrants) or disappear from the data set.
-
-**(e). Industries that account for the most high-margin firms** 
-
-Here's the updated code:
+**(b).** Produce the equivalent table for the five firms with the highest `asset_turnover`.
 
 ```{r}
 firm_strategy |>
-    filter(profit_margin > -2 & strategy_type == 'High margin') |>
-    group_by(industry) |>
-    summarize(obs = n()) |>
-    arrange(desc(obs)) |>
-    head(5)
+    slice_max(asset_turnover, n = 5) |>
+    select(conml, industry, profit_margin, asset_turnover)
 ```
 
-In our trimmed sample, of firms that employ a high-margin strategy, Mining & Metals industry accounts for the largest share. This is consistent with our earlier observations in Exercise 3 (a).
+**(c).** One possible interpretation is:
 
-**(f). Industries that account for the most high-volume firms** 
+* The same firms do **not** appear in both tables, which suggests that high profit margin and high asset turnover capture different ways of operating.
+* Firms in the high-margin table earn more profit from each dollar of sales. These firms may benefit from pricing power, favourable cost conditions, scarce resources, or stable demand.
+* In this output, the high-margin table includes industries such as **mining**, **gas utilities**, and **building products**.
+* This makes economic sense because some firms in these sectors can earn strong margins without needing extremely high sales relative to their asset base.
+* Firms in the high-turnover table generate more sales from a given asset base. These firms may rely more on high volume, fast-moving sales, or relatively asset-light operations.
+* In this output, the high-turnover table includes industries such as **professional services**, **specialty retail**, **commercial services**, **construction and engineering**, and **distribution/retail**.
+* This also makes sense because firms in these sectors often operate by generating lots of sales or work relative to the assets recorded on their balance sheets.
+* The broader lesson is that firms can generate strong performance in different ways: some rely more on margin, while others rely more on turning assets into sales quickly.
+* A useful intuition is that a mining firm may sell fewer units but earn much more on each sale, while a retailer may earn much less on each sale but sell many more units.
 
-Here's the updated code:
-
-```{r}
-firm_strategy |>
-    filter(profit_margin > -2 & strategy_type == 'High volume') |>
-    group_by(industry) |>
-    summarize(obs = n()) |>
-    arrange(desc(obs)) |>
-    head(5)
-```
-
-In our trimmed sample, of firms that employ a high-volume strategy, Construction & Engineering, Mining & Metals, and Special Retail industries account for the largest share. These industries likely operate under conditions where competitive pressures and customer expectations keep margins tight. Profitability depends on selling large quantities, spreading fixed costs over high output, and leveraging economies of scale in production, procurement, or distribution. 
-
-Part of why Metals & Mining appears here could also be structural, not just strategic. Mining firms make up a huge share of the ASX by count and by market capitalization, so even if only a fraction of them follow a high-volume, low-margin model, they can still show up prominently in the list.
-
-**(g). Industry composition by strategy type**
-
-Here's the updated code:
-
-```{r}
-firm_strategy |>  
-    # Use %in% for filtering industries
-    filter(profit_margin > -2 & industry %in% big_industries) |> 
-    # Group by both industry and strategy_type
-    group_by(industry, strategy_type) |>  
-    # Count the number of occurrences for each strategy_type within each industry
-    summarize(count = n(), .groups = 'drop') |>  
-    # Map 'industry' to x-axis and 'strategy_type' to fill
-    ggplot(aes(x = industry, y = count, fill = strategy_type)) +  
-    geom_bar(stat = "identity") +  
-    theme_minimal() +  
-    # Rotate and align x-axis labels
-    theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),  
-          # Remove the legend title
-          legend.title = element_blank()) +  
-    # Wrap x-axis labels at width 10 characters
-    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +  
-    scale_fill_okabe_ito() +
-    labs(#No label for x-axis
-         x = NULL,
-         y = "No. of Firms",
-         title = "Strategy Type Across Large Australia Comapnies in 2024: The 'Big' Industries"
-         ) 
-```
-
-Main insights:
-
-- Metals & Mining dominates — largest number of firms and all four strategy types in substantial numbers, indicating both size and heterogeneity. 
-- Specialty Retail has the least variation in strategy types.
-- High-volume strategies are widespread — especially in Construction & Engineering, Food Products, and Specialty Retail.  
-- Superstars cluster in certain sectors — notably Specialty Retail and Hotels, Restaurants, and Leisure.  
-- Sinking ships concentrate in cyclical, capital-intensive sectors — particularly Metals & Mining and Oil, Gas & Consumable Fuels.  
+In the next exercise we will see how this relates to industry sectors as a whole.
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-solutions -->
+

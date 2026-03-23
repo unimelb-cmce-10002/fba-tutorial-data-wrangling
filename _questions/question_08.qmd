@@ -1,0 +1,156 @@
+<!-- question-type: inclass -->
+### Exercise 8 [Optional]: Visualising the Profit Margin – Asset Turnover Relationship
+
+In Exercises 5 and 6, you identified that firms and industries tend to perform strongly on either profit margin or asset turnover, but rarely both. In this exercise, you will visualise that pattern using a scatter plot.
+
+**(a).** Using `industry_summary`, create a scatter plot with `avg_profit_margin` on the x-axis and `avg_asset_turnover` on the y-axis.
+
+```{r}
+#| eval: false
+industry_summary |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() 
+```
+
+**(b).** Does the plot look the way you expected? Is anything making it hard to read?
+
+
+**(c).** Filter `industry_summary` to keep only industries with at least 3 firms and an average profit margin above -5, then recreate the scatter plot from (a).
+
+```{r}
+#| eval: false
+industry_summary |>
+  filter(YOUR_CONDITIONS) |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() 
+```
+
+**(d).** Add a `geom_smooth()` layer to the plot from (b). 
+
+```{r}
+#| eval: false
+industry_summary |>
+  filter(YOUR_CONDITIONS) |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() +
+  YOUR_CODE(method = "lm",
+            se = FALSE)
+```
+
+**(e).** What does the line suggest about the relationship between average profit margin and average asset turnover across industries?
+
+
+<!-- BEGIN PROFILE:r-teaching-guide -->
+
+::: {.content-visible when-profile="r-teaching-guide"}
+
+::: {.teaching-block}
+
+::: {.teaching-block-header}
+Teaching Note
+:::
+
+::: {.teaching-block-body}
+
+🎯 **Learning Objective**
+
+Students should:
+
+- Apply previously learned ggplot2 skills in a new analytical context
+- Recognise that raw data often needs filtering before it can be visualised meaningfully
+- Interpret a scatter plot and fitted line as evidence of a tradeoff between two business strategy dimensions
+- Connect the visual pattern back to the analytical findings from Exercises 5 and 6
+
+✅ **Core Concepts to Highlight**
+
+- A scatter plot is useful when we want to show the relationship between two continuous variables
+- Outliers and small groups can distort a visualisation in the same way they can distort a summary table
+- `geom_smooth(method = "lm", se = FALSE)` adds a linear trend line without a confidence band
+- The negative relationship between margin and turnover is the visual equivalent of the pattern students identified in Exercises 5 and 6
+- This kind of plot is commonly used in strategy consulting and equity research to position firms or industries relative to one another
+
+💬 **Suggested In-Class Prompts**
+
+- What does a point in the top-left of the scatter represent? What about bottom-right?
+- Why does filtering matter before plotting — what would a student who skipped that step conclude?
+- Does the trend line surprise you, given what you found in Exercises 5 and 6?
+- Are there any industries that sit close to the trend line, and any that sit far from it? What might explain that?
+
+📌 **Common Misunderstandings**
+
+- Treating the unfiltered plot as the final answer without noticing the distortion
+- Thinking `geom_smooth()` proves causation rather than showing a descriptive pattern
+- Not connecting the visual finding back to the earlier analytical exercises
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-teaching-guide -->
+
+<!-- BEGIN PROFILE:r-solutions -->
+
+::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
+
+::: {.solution-block}
+
+::: {.solution-block-header}
+Solution
+:::
+
+::: {.solution-block-body}
+
+**(a).*
+
+```{r}
+industry_summary |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point()
+```
+
+**(b).** The unfiltered plot displays all industries but may have a distorted x-axis due to one or two industries with very negative average profit margins
+
+**(c).** 
+
+```{r}
+industry_summary |>
+  filter(n_firms >= 3, avg_profit_margin > -0.5) |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point() 
+```
+
+
+**(d).** 
+
+```{r}
+industry_summary |>
+  filter(n_firms >= 3, avg_profit_margin > -0.5) |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+**(e).** We filter before plotting because extreme or unreliable values can distort the picture and lead to misleading conclusions.
+
+:::
+
+:::
+
+:::
+
+<!-- END PROFILE:r-solutions -->
+  

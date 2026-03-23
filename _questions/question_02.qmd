@@ -1,195 +1,84 @@
 <!-- question-type: prepare -->
-### Exercise 2: Firm Strategy and The Profit Margin - Asset Turnover Relationship
+### Exercise 2: Understanding the Pipe Operator, `|>`
 
-Our objective is to create the following plot:
+In this exercise, we use two animals — a lion and a giraffe — to explore how the pipe operator, `|>`, works.
+This lets us focus on the order of the steps without needing to think about data yet.
 
-```{r, echo = FALSE, warning=FALSE}
-firm_strategy |>
-     #To improve our visualization, we need to focus on representative 
-    # firms and drop outliers (see exercises 1 & 4 for more)
-    filter(profit_margin > -2) |>
-    ggplot() + 
-    geom_point(aes(y = profit_margin, x = asset_turnover), 
-               alpha = 0.3
-               ) + 
-     # Add a vertical line to show median value
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", 
-               color = "blue", 
-               size = 1
-               ) +
-    # Add a horizontal line to show median value
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", 
-               color = "blue", 
-               size = 1
-               ) +  
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Profit Margin") + 
-    guides(color = guide_legend(title = NULL))
+Suppose we start with an object called `lion`.
+We want the lion to do the following actions in order:
+
+1. stand up
+2. lift its head by 30 degrees
+3. roar at volume 10
+
+**(a).** One way to write this is to create a new object after each step.
+
+```r
+lion_step1 <- stand_up(lion)
+lion_step2 <- lift_head(lion_step1, angle = 30)
+lion_step3 <- roar(lion_step2, volume = 10)
 ```
 
-**(a).** In exercise 1, you used histograms to show the distributions of `profit_margin` and `asset_turnover`. Use the starter code below to identify the five firms in the right tail of each of these distributions-i.e., those firms that have the highest profit margins, and those firms that have the highest asset turnover.
+What does `lion_step2` represent?
 
-To help, we have included the table that your code should output for `profit_margin`:
+**(b).** We could also write the same sequence by placing one function inside another.
 
-```{r, echo=FALSE}
-firm_strategy |>
-    slice_max(profit_margin, n = 5) |>
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic)
+```r
+roar(lift_head(stand_up(lion), angle = 30), volume = 10)
 ```
 
-```{r, eval=FALSE}
-# Replicate the profit margin table
-firm_strategy |> 
-    # slice_max is a concise alternative to using arrange() then head()
-    slice_max(YOUR_VARIABLE_NAME, n = 5) |> 
-    select(YOUR_VARIABLE_NAME, ..., YOUR_VARIABLE_NAME)
+This version is shorter, but it can be harder to read because we have to work from the inside out.
+
+Which function runs first in this version?
+
+**(c).** The pipe operator lets us write the same sequence in the order the actions happen.
+
+```r
+lion |>
+  stand_up() |>
+  lift_head(angle = 30) |>
+  roar(volume = 10)
 ```
 
-```{r, eval=FALSE}
-# Produce the equivalent table for asset turnover
-firm_strategy |> 
-    # slice_max is a concise alternative to using arrange() then head()
-    slice_max(YOUR_VARIABLE_NAME, n = 5) |> 
-    select(YOUR_VARIABLE_NAME, ..., YOUR_VARIABLE_NAME)
+In the line `lift_head(angle = 30)`, what is being piped in, and what is the extra argument?
+
+**(d).** Now try this yourself.
+
+Suppose we start with an object called `giraffe`.
+We want the giraffe to do the following actions in order:
+
+1. step forward by 2 steps
+2. lower its neck by 45 degrees
+3. drink water for 5 seconds
+
+Write this sequence in the three ways shown above.
+
+**Step-by-step with intermediate objects**
+
+```r
+# Write your answer here
 ```
 
-**(b).**  Do we observe differences in industries or firm size across these tables? Are the same or different firms present across these tables? How do profit margin and asset turnover appear to be related and what does this reveal about firm strategy?
+**Function inside function**
 
-
-**(c).** Next, we want to create a new variable that classifies each firm in our sample as one of the following strategy types:
-
-- IF above median profit margin AND below median asset turnover THEN, strategy type = 'High margin'
-- IF below median profit margin AND above median asset turnover THEN, strategy type = 'High volume' 
-
-Some firms may fail to meet the conditions for either of these categories. Classify these firms as follows:
-
-- IF below median profit margin AND below median asset turnover THEN, strategy type =  'Sinking ship'
-- IF above median profit margin AND above median asset turnover THEN, strategy type =  'Superstar'
-
-Use the starter code below to create the variable `strategy_type` and so classify each firm's strategy type. Replace `YOUR_DATAFRAME`, `YOUR_FUNCTION_NAME` and `YOUR_VARIABLE_NAME` as appropriate.
-
-```{r eval=FALSE}
-YOUR_DATAFRAME <- 
-    firm_strategy |>
-    YOUR_FUNCTION_NAME(
-        strategy_type = case_when(
-            # Case 1: High Margin
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-            asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "High margin",
-            # Case 2: High Volume      
-            YOUR_VARIABLE_NAME < median(YOUR_VARIABLE_NAME, na.rm = TRUE) &
-            YOUR_VARIABLE_NAME >= median(YOUR_VARIABLE_NAME, na.rm = TRUE) ~ "High volume",
-            # Case 3: Sinking Ship
-            YOUR_VARIABLE_NAME < median(YOUR_VARIABLE_NAME, na.rm = TRUE) &
-            YOUR_VARIABLE_NAME < median(YOUR_VARIABLE_NAME, na.rm = TRUE) ~ "Sinking ship",
-            # Case 4: Superstar
-            YOUR_VARIABLE_NAME >= median(YOUR_VARIABLE_NAME, na.rm = TRUE) &
-            YOUR_VARIABLE_NAME >= median(YOUR_VARIABLE_NAME, na.rm = TRUE) ~ "Superstar",
-            # Default : catch any unmatched cases
-            .default = NA_character_  
-    )
-  )
+```r
+# Write your answer here
 ```
 
-```{r echo=FALSE}
-firm_strategy <- 
-    firm_strategy |>
-    mutate(
-        strategy_type = case_when(
-            # Case 1: High Margin
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-            asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "High margin",
-            # Case 2: High Volume      
-            profit_margin < median(profit_margin, na.rm = TRUE) &
-            asset_turnover >= median(asset_turnover, na.rm = TRUE) ~ "High volume",
-            # Case 3: Sinking Ship
-            profit_margin < median(profit_margin, na.rm = TRUE) &
-            asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "Sinking ship",
-            # Case 4: Superstar
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-            asset_turnover >= median(asset_turnover, na.rm = TRUE) ~ "Superstar",
-            # Default : catch any unmatched cases
-            .default = NA_character_  
-    )
-  )
+**With the pipe**
 
+```r
+# Write your answer here
 ```
 
-**(d).** To shed light on how the above 'works', run the code below and explain what each part of the code 'does' to the output. What must be the case for a firm's strategy type to be classified as 'High margin'? How is a firm's strategy type classified if this is not the case? What value does strategy type take if only one of these conditions holds?
+**(e).** Complete the sentence below:
 
-```{r, eval=FALSE}
-firm_strategy |>
-    mutate(
-        strategy_type = case_when(
-            # Case 1: 
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-                asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "High margin",
-            # Case 2:
-            is.na(profit_margin) | is.na(asset_turnover) ~ NA_character_,
-            # Other cases -- the default:
-            .default = "Other"
-    )
-  ) |> 
-  select(conml, profit_margin, asset_turnover, strategy_type) |>
-  head(10)
-```
+> The pipe operator takes __________ and passes it into __________.
 
-**(e).** Now, we can examine the relationship between profit margin, asset turnover, and firm strategy. Use the starter code below to create a basic scatterplot of profit margin vs asset turnover. Replace the placeholder code (e.g., `YOUR_DATAFRAME`) as appropriate.
-
-```{r, eval=FALSE}
-YOUR_DATAFRAME |>
-    # To improve our visualization, we need to focus on representative 
-    # firms and drop outliers (see exercises 1 & 4 for more)
-    filter(profit_margin > -2) |> 
-    YOUR_FUNCTION_NAME() + 
-    YOUR_FUNCTION_NAME(
-        aes(y = YOUR_VARIABLE_NAME, x = YOUR_VARIABLE_NAME), 
-            alpha = 0.3
-        ) +
-        # Add a vertical line to show median value
-    geom_vline(xintercept = median(YOUR_DATAFRAME$YOUR_VARIABLE_NAME, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-        ) +
-        # Add a horizontal line to show median value
-    geom_hline(yintercept = median(YOUR_DATAFRAME$YOUR_VARIABLE_NAME, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-        ) + 
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-         x = YOUR_LABEL, 
-         y = YOUR_LABEL
-         ) + 
-    guides(color = guide_legend(title = NULL))
-```
-
-You plot should look like this:
-
-```{r, echo=FALSE}
-firm_strategy |>
-    filter(profit_margin > -2) |> # To improve our visualization, we need to focus on representative firms and drop outliers (see exercises 1 & 4 for more)
-    ggplot() + 
-    geom_point(aes(y = profit_margin, x = asset_turnover), 
-                   alpha = 0.3) + 
-    # Add a vertical line to show median value
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1) + 
-    # Add a horizontal line to show median value
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1) +  
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Profit Margin") + 
-    guides(color = guide_legend(title = NULL))
-```
-
-**(f).** Nice! We can learn a lot from this plot, but to start let's return to an earlier question we considered: How do profit margin and asset turnover appear to be related and what does this reveal about firm strategy? Explain why we have few firms in the top right? And why we have few firms in the bottom left?
+**(f).** In one sentence, explain how the pipe helps us write code in an **“and then”** way.
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
+
 ::: {.content-visible when-profile="r-teaching-guide"}
 
 ::: {.teaching-block}
@@ -200,40 +89,48 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 **Learning Objective** 
+🎯 Learning Objective
 
 Students should:
 
-- Use `slice_max()` with `select()` to identify top firms based on a given metric (e.g., highest profit margin or asset turnover).
-- Apply `mutate()` and `case_when()` to create a categorical variable (e.g., firm strategy type) based on multiple numeric thresholds.
-- Interpret the relationship between profit margin and asset turnover and connect results to strategic frameworks.
-- Use `ggplot2` to create scatterplots with median reference lines and explain quadrant patterns in business terms.
+* reinforce their understanding of how the pipe operator works
+* see that the same sequence of steps can be written in multiple ways
+* understand that the object on the left of the pipe is passed into the next function
+* describe the pipe as a way of writing code in a clear “and then” sequence
 
-✅   **Core Concepts to Highlight**
+✅ **Core Concepts to Highlight**
 
-- Different performance metrics identify different firms – high-margin firms and high-turnover firms rarely overlap because they reflect distinct strategies.
-- Industry patterns – high-margin leaders often in capital-intensive sectors; high-turnover leaders often in retail or service sectors.
-- Categorical classification logic – understanding how `case_when()` is evaluated and how order matters in assigning categories.
-- Quadrant analysis – using medians as cutoffs to classify firms and interpret strategic positioning.
+* intermediate objects make each step explicit
+* nested functions compress the same logic, but can be harder to read
+* the pipe preserves the same logic while writing the steps in the order they happen
+* in a piped sequence, the object on the left is passed into the next function
+* extra arguments, such as `angle = 30` or `volume = 10`, are still written normally
 
-💬 **Suggested In-Class Prompts** (if needed)
+💬 Suggested In-Class Prompts
 
-NA
+* What stays the same across all three versions?
+* What disappears when we move from intermediate objects to the pipe?
+* Why might the piped version be easier to read from top to bottom?
+* In `lion |> stand_up()`, where does `lion` go inside the function?
+* In `lift_head(angle = 30)`, which part is the piped object and which part is the extra instruction?
 
-📌 **Common Misunderstandings**
+📌 Common Misunderstandings
 
-- Thinking `slice_max()` changes the original data frame – it just returns the requested rows for that pipeline.
-- Assuming high ROIC always requires both high margin and high turnover – either one can drive high returns if the other is reasonable.
-- Confusing medians with means when setting classification cutoffs – medians are less sensitive to outliers.
+* Thinking the pipe changes what the code does, rather than how it is written
+* Thinking the object on the left of the pipe disappears, rather than being passed into the next function
+* Confusing the piped object with the extra argument written inside the function
+* Assuming the nested version runs from left to right, rather than from the inside out
 
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-teaching-guide -->
 
 <!-- BEGIN PROFILE:r-solutions -->
+
 ::: {.content-visible when-profile="r-solutions" when-profile="r-teaching-guide"}
 
 ::: {.solution-block}
@@ -244,141 +141,49 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a). Filtering and selecting to identify high-performing firms**
+**(a).** `lion_step2` represents the lion after it has stood up and then lifted its head by 30 degrees.
 
-Here's the updated code:
+**(b).** The first function to run is `stand_up()`.
 
-```{r}
-firm_strategy |>
-    slice_max(profit_margin, n = 5) |> 
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic)
+**(c).** The object being piped in is the lion. The extra argument is `angle = 30`.
+
+**(d).** One correct way to write the giraffe sequence is shown below.
+
+**Step-by-step with intermediate objects**
+
+```r
+giraffe_step1 <- step_forward(giraffe, steps = 2)
+giraffe_step2 <- lower_neck(giraffe_step1, angle = 45)
+giraffe_step3 <- drink_water(giraffe_step2, seconds = 5)
 ```
 
-```{r}
+**Function inside function**
 
-firm_strategy |>
-    slice_max(asset_turnover, n = 5) |> 
-    select(conml, industry, ebit, at, sale, profit_margin, asset_turnover, roic)
-
+```r
+drink_water(lower_neck(step_forward(giraffe, steps = 2), angle = 45), seconds = 5)
 ```
 
-**(b). Firm strategy, industry, and size**  
+**With the pipe**
 
-The firms with the highest profit margins are concentrated in capital-intensive industries such as metals & mining, utilities, and building products. These companies tend to be larger in scale, with substantial asset bases, and focus on earning high mark-ups per unit sold, even if sales volumes relative to assets are modest.
-
-By contrast, the firms with the highest asset turnover operate in industries like retail, professional services, and construction services. They are often smaller in absolute size but excel at generating very high sales relative to the assets they employ. Margins are typically lower, but rapid sales cycles and intensive asset use drive strong turnover.
-
-No firms appear in both lists, highlighting that profit margin and asset turnover often trade off. High-margin firms accept lower turnover, while high-turnover firms operate on thinner margins. These patterns reflect distinct strategies for achieving profitability — one driven by margins, the other by turnover.
-
-**(c).   Classifying firms by strategy type**
-
-Here's the updated code:
-
-```{r}
-firm_strategy <- 
-    firm_strategy |>
-    mutate(
-        strategy_type = case_when(
-            # Case 1: High Margin
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-            asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "High margin",
-            # Case 2: High Volume      
-            profit_margin < median(profit_margin, na.rm = TRUE) &
-            asset_turnover >= median(asset_turnover, na.rm = TRUE) ~ "High volume",
-            # Case 3: Sinking Ship
-            profit_margin < median(profit_margin, na.rm = TRUE) &
-            asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "Sinking ship",
-            # Case 4: Superstar
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-            asset_turnover >= median(asset_turnover, na.rm = TRUE) ~ "Superstar",
-            # Default : catch any unmatched cases
-            .default = NA_character_  
-    )
-  )
+```r
+giraffe |>
+  step_forward(steps = 2) |>
+  lower_neck(angle = 45) |>
+  drink_water(seconds = 5)
 ```
 
-**(d). Using `case_when()` to create categorical variables**
+**(e).** One correct completion is:
 
-```{r, eval=FALSE}
-firm_strategy |>
-    mutate(
-        strategy_type = case_when(
-            # Case 1: 
-            profit_margin >= median(profit_margin, na.rm = TRUE) &
-                asset_turnover < median(asset_turnover, na.rm = TRUE) ~ "High margin",
-            # Case 2:
-            is.na(profit_margin) | is.na(asset_turnover) ~ NA_character_,
-            # Other cases -- the default:
-            .default = "Other"
-    )
-  ) |> 
-  select(conml, profit_margin, asset_turnover, strategy_type) |>
-  head(10)
-```
+> The pipe operator takes an object and passes it into the next function.
 
-This code starts with the `firm_strategy` data frame and transforms it step-by-step.  
+**(f).** One possible answer is:
 
-1. The `mutate()` call creates a new column, strategy_type, using `case_when()` to assign a label based on each firm’s financial metrics. 
+> The pipe helps us write code as a sequence of actions: do this, and then this, and then this.
 
-2. Case-wise Classification:
-    * Case 1 – "High margin": Assigned if both conditions are true:
-        - profit_margin is at least the median profit margin (ignoring missing values), and
-        - asset_turnover is less than the median asset turnover (ignoring missing values).
-    * Case 2 – Missing data: If either profit_margin or asset_turnover is missing, the result is set to `NA_character_`
-    * Case 3: Default case
-        - All other firms are assigned "Other" using the `.default` argument in `case_when()`
-
-3. `select(conml, profit_margin, asset_turnover, strategy_type)`  
-   Keeps only the relevant columns in the output.  
-
-4. `head(10)`  
-   Shows just the first 10 rows of the resulting table.  
-
-A firm’s strategy type is `"High margin"` only if it has an above-median profit margin and a below-median asset turnover.  
-If this is not the case (meaning at least one condition fails), it is classified as `"Other"`.  
-This means that if only one condition holds — for example, a firm has a high profit margin but also high turnover, or low margin but low turnover — the strategy type will still be `"Other"`.
-
-**(e). Profit margin vs asset turnover scatterplot **
-
-Here's the updated code:
-
-```{r}
-firm_strategy |>
-    filter(profit_margin > -2) |>
-    ggplot() + 
-    geom_point(aes(y = profit_margin, x = asset_turnover), 
-               alpha = 0.3
-               ) + 
-    # Add a vertical line to show median value
-    geom_vline(xintercept = median(firm_strategy$asset_turnover, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) + 
-    # Add a horizontal line to show median value
-    geom_hline(yintercept = median(firm_strategy$profit_margin, na.rm = TRUE), 
-               linetype = "dashed", color = "blue", size = 1
-               ) +  
-    theme_minimal() + 
-    labs(title = "Variation in Firm Strategy Across A Sample of Large ASX Companies in 2024", 
-         x = "Asset Turnover", 
-         y = "Profit Margin"
-         ) + 
-    guides(color = guide_legend(title = NULL))
-```
-
-**(f). Firm strategy, trade-offs, and specialization**
-
-Looking at your scatterplot of profit margin versus asset turnover, we can make a few observations about the relationship and what it implies for firm strategy:
-
-1. Inverse relationship between margin and turnover - Most firms cluster at the intersection of the median lines, with higher profit margins generally associated with lower asset turnover, and vice versa. This aligns with the classic high-volume vs. high-margin strategic framework.
-
-2. Few firms in the top right - The top right quadrant (high margin, high turnover) is nearly empty. This suggests that it is rare for firms to excel at both strategies simultaneously. High margins often require specialized products or services, while high turnover typically involves commoditized offerings with lower margins.
-
-3. Few firms in the bottom left - The bottom left quadrant (low margin, low turnover) is also sparse. Low profitability and inefficient use of assets usually result in competitive exit or restructuring.
-
-Overall, the scatterplot visually confirms the trade-off between profit margin and asset turnover, illustrating how firms generally adopt a clear strategic orientation — either high-margin or high-volume — rather than trying to excel at both simultaneously.
 :::
 
 :::
 
 :::
+
 <!-- END PROFILE:r-solutions -->
