@@ -101,7 +101,7 @@ Solution
 
 **(a).** Create a new object called `firm_strategy_check` that keeps only the listed variables.
 
-```r
+```{r}
 firm_strategy_check <-
     firm_strategy |>
     select(conml, ebit, at, sale, profit_margin, asset_turnover)
@@ -109,7 +109,7 @@ firm_strategy_check <-
 
 **(b).** Display the first 10 rows.
 
-```r
+```{r}
 firm_strategy_check |>
     slice_head(n = 10)
 ```

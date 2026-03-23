@@ -64,7 +64,7 @@ Teaching Note
 
 ::: {.teaching-block-body}
 
-🎯 Learning Objective
+🎯 **Learning Objective**
 
 Students should:
 
@@ -82,7 +82,7 @@ Students should:
 * Industry averages show typical patterns, but they do not tell us everything about variation within industries
 * Comparing rankings by average margin and average turnover helps students see that industries can differ in their business models
 
-💬 Suggested In-Class Prompts
+💬 **Suggested In-Class Prompts**
 
 * What changes when we move from firm-level tables to industry-level summaries?
 * Why is `n_firms` useful to include in the table?
@@ -94,7 +94,7 @@ Students should:
 * Which appear to be more turnover-driven on average?
 * Why might some industries rank highly on one measure but not the other?
 
-📌 Common Misunderstandings
+📌 **Common Misunderstandings**
 
 * Forgetting to group by `industry` before summarising
 * Using the wrong variable inside the `mean()` function

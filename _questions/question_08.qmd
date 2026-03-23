@@ -1,55 +1,50 @@
 <!-- question-type: inclass -->
-### Exercise 8 [Optional]: Counting Firms Above and Below the Median Profit Margin
+### Exercise 8 [Optional]: Visualising the Profit Margin – Asset Turnover Relationship
 
-So far, we have used averages to compare industries. Another useful question is whether an industry has many firms performing above a simple benchmark, or only a small number of standout firms. In this exercise, we use the median profit margin as that benchmark and count how many firms in each industry fall above and below it.
+In Exercises 5 and 6, you identified that firms and industries tend to perform strongly on either profit margin or asset turnover, but rarely both. In this exercise, you will visualise that pattern using a scatter plot.
 
-**(a).** First, compute the median of `profit_margin` and store it in an object called `median_profit_margin`.
-
-```{r}
-#| eval: false
-median_profit_margin <- median(YOUR_CODE_HERE, na.rm = TRUE)
-```
-
-**(b).** Now use `mutate()` and `if_else()` to create a new variable called `margin_groip`.
-
-Classify firms as:
-
-* `"Above median margin"` if `profit_margin >= median_profit_margin`
-* `"Below median margin"` otherwise
+**(a).** Using `industry_summary`, create a scatter plot with `avg_profit_margin` on the x-axis and `avg_asset_turnover` on the y-axis.
 
 ```{r}
 #| eval: false
-firm_strategy_bucketed <-
-    firm_strategy |>
-    mutate(
-        margin_group = if_else(
-            profit_margin >= YOUR_CODE_HERE,
-            "Above median margin",
-            "Below median margin"
-        )
-    )
+industry_summary |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() 
 ```
 
-**(c).** Using `group_by()` and `summarise()`, count how many firms fall into each combination of `industry` and `margin_group`.
+**(b).** Does the plot look the way you expected? Is anything making it hard to read?
+
+
+**(c).** Filter `industry_summary` to keep only industries with at least 3 firms and an average profit margin above -5, then recreate the scatter plot from (a).
 
 ```{r}
 #| eval: false
-firm_strategy_grouped |>
-    group_by(YOUR_VARIABLES_HERE) |>
-    summarise(YOUR_CODE_HERE)
+industry_summary |>
+  filter(YOUR_CONDITIONS) |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() 
 ```
 
-**(d).** Now produce the same result using `count()` by running the code below.
+**(d).** Add a `geom_smooth()` layer to the plot from (b). 
 
 ```{r}
 #| eval: false
-firm_strategy_grouped |>
-    count(industry, margin_bucket, name = "n_firms")
+industry_summary |>
+  filter(YOUR_CONDITIONS) |>
+  ggplot(aes(x = YOUR_VARIABLE, 
+             y = YOUR_VARIABLE)
+         ) +
+  YOUR_CODE() +
+  YOUR_CODE(method = "lm",
+            se = FALSE)
 ```
 
-**(e).** Compare the code from parts (c) and (d). What does this suggest about when `count()` might be useful?
+**(e).** What does the line suggest about the relationship between average profit margin and average asset turnover across industries?
 
-**(f).** Looking at your table, which industries appear most often in the `"Above median margin"` group?
 
 <!-- BEGIN PROFILE:r-teaching-guide -->
 
@@ -67,39 +62,31 @@ Teaching Note
 
 Students should:
 
-* compute a benchmark outside the pipeline and then use it inside `mutate()`
-* use `if_else()` to create a simple two-group categorical variable
-* apply `group_by()` and `summarise(n = n())` to count grouped observations
-* recognise that `count()` is a convenient shortcut for a common grouped counting task
-* interpret counts above and below a benchmark as a different way of comparing industries
+- Apply previously learned ggplot2 skills in a new analytical context
+- Recognise that raw data often needs filtering before it can be visualised meaningfully
+- Interpret a scatter plot and fitted line as evidence of a tradeoff between two business strategy dimensions
+- Connect the visual pattern back to the analytical findings from Exercises 5 and 6
 
 ✅ **Core Concepts to Highlight**
 
-* Averages are useful, but they do not show how observations are distributed within a group
-* The median can be used as a simple benchmark to split firms into two categories
-* It can be helpful to calculate a benchmark outside the pipeline and then refer to it inside `mutate()`
-* `if_else()` creates a new variable based on a condition
-* `group_by(industry, margin_group)` combined with `summarise(n_firms = n())` counts firms in each combination
-* `count(industry, margin_group)` is a shorter way to do a similar task
-* This exercise shows a composition-based view of industries, not just an average-based view
+- A scatter plot is useful when we want to show the relationship between two continuous variables
+- Outliers and small groups can distort a visualisation in the same way they can distort a summary table
+- `geom_smooth(method = "lm", se = FALSE)` adds a linear trend line without a confidence band
+- The negative relationship between margin and turnover is the visual equivalent of the pattern students identified in Exercises 5 and 6
+- This kind of plot is commonly used in strategy consulting and equity research to position firms or industries relative to one another
 
 💬 **Suggested In-Class Prompts**
 
-* What does this exercise tell us that an industry average does not?
-* Why might an industry with a high average margin still have only a few firms above the median?
-* Why might it be useful to calculate the median once and store it as an object?
-* What is the role of the median in this exercise?
-* How does `count()` relate to `group_by()` and `summarise(n = n())`?
-* Why might an analyst choose the shorter `count()` version in practice?
+- What does a point in the top-left of the scatter represent? What about bottom-right?
+- Why does filtering matter before plotting — what would a student who skipped that step conclude?
+- Does the trend line surprise you, given what you found in Exercises 5 and 6?
+- Are there any industries that sit close to the trend line, and any that sit far from it? What might explain that?
 
 📌 **Common Misunderstandings**
 
-* Confusing the median benchmark with the industry average
-* Trying to put too much new logic into one line instead of using a stored object to simplify the code
-* Forgetting to include both `industry` and `margin_group` in the grouped count
-* Thinking `count()` does something conceptually different from `summarise(n = n())`
-* Interpreting raw counts as proportions or shares
-* Forgetting that industries with more firms may naturally appear more often in the counts
+- Treating the unfiltered plot as the final answer without noticing the distortion
+- Thinking `geom_smooth()` proves causation rather than showing a descriptive pattern
+- Not connecting the visual finding back to the earlier analytical exercises
 
 :::
 
@@ -121,48 +108,43 @@ Solution
 
 ::: {.solution-block-body}
 
-**(a).** Compute the median of `profit_margin` and store it in an object.
+**(a).*
 
 ```{r}
-median_profit_margin <- median(firm_strategy$profit_margin, na.rm = TRUE)
+industry_summary |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point()
 ```
 
-**(b).** Create `margin_bucket` using `mutate()` and `if_else()`.
+**(b).** The unfiltered plot displays all industries but may have a distorted x-axis due to one or two industries with very negative average profit margins
+
+**(c).** 
 
 ```{r}
-firm_strategy_grouped <-
-    firm_strategy |>
-    mutate(
-        margin_bucket = if_else(
-            profit_margin >= median_profit_margin,
-            "Above median margin",
-            "Below median margin"
-        )
-    )
+industry_summary |>
+  filter(n_firms >= 3, avg_profit_margin > -0.5) |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point() 
 ```
 
-**(c).** Count firms using `group_by()` and `summarise()`.
+
+**(d).** 
 
 ```{r}
-firm_strategy_grouped |>
-    group_by(industry, margin_bucket) |>
-    summarise(n_firms = n(), .groups = "drop")
+industry_summary |>
+  filter(n_firms >= 3, avg_profit_margin > -0.5) |>
+  ggplot(aes(x = avg_profit_margin, 
+             y = avg_asset_turnover
+             )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
 ```
 
-**(d).** Produce the same result using `count()`.
-
-```{r}
-firm_strategy_grouped |>
-    count(industry, margin_bucket, name = "n_firms")
-```
-
-**(e).** One possible interpretation is:
-
-* The two pieces of code produce the same type of result.
-* `count()` is useful when we want a quick grouped frequency table without writing out `group_by()` and `summarise(n_firms = n())` in full.
-* `group_by()` and `summarise()` are more flexible, while `count()` is a helpful shortcut for a common task.
-
-**(f).** A good answer should name the industries that appear most often in the `"Above median margin"` group and note that this is a different way of comparing industries from using averages alone.
+**(e).** We filter before plotting because extreme or unreliable values can distort the picture and lead to misleading conclusions.
 
 :::
 

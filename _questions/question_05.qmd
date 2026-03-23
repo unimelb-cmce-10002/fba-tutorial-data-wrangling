@@ -105,18 +105,18 @@ Solution
 
 **(a).** Use `slice_max()` to identify the five firms with the highest `profit_margin`.
 
-```r
+```{r}
 firm_strategy |>
     slice_max(profit_margin, n = 5) |>
-    select(conml, industry, profit_margin, asset_turnover, roic)
+    select(conml, industry, profit_margin, asset_turnover)
 ```
 
 **(b).** Produce the equivalent table for the five firms with the highest `asset_turnover`.
 
-```r
+```{r}
 firm_strategy |>
     slice_max(asset_turnover, n = 5) |>
-    select(conml, industry, profit_margin, asset_turnover, roic)
+    select(conml, industry, profit_margin, asset_turnover)
 ```
 
 **(c).** One possible interpretation is:

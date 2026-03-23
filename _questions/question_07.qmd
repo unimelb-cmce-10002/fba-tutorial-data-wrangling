@@ -84,13 +84,25 @@ Solution
 
 Here is one strong example of the kind of answer we are aiming for.
 
-* We analysed how large Australian listed firms generate performance, focusing on profit margin and asset turnover at both the firm and industry level.
-* First, the firms with the highest profit margins were usually different from the firms with the highest asset turnover, which suggests that businesses can perform well through different operating models.
-* Second, these differences also appeared at the industry level: some industries tended to have higher average margins, while others tended to generate higher sales relative to their asset base.
-* The main business lesson is that the executives should not judge performance using a single metric in isolation. A strong firm in one sector may look very different from a strong firm in another, so benchmarking and strategic recommendations should reflect how that industry typically creates value.
+> We analysed how the 200 largest ASX-listed firms generate performance, focusing on profit margin and asset turnover across industries.
+>
+> Industries tend to generate strong performance in one of two ways. Some — such as mining, building products, and software — earn a large share of each sales dollar as profit, often because of pricing power, scarce resources, or the economics of scaling intangible products. Others — such as retail, construction, and distribution — generate large sales relative to their asset base by operating at high volume or through asset-light business models. A small number of industries, such as professional services, perform reasonably well on both.
+>
+> The main business lesson is that performance metrics need to be interpreted in the context of how an industry creates value. Benchmarking firms or setting targets using a single metric in isolation, without accounting for industry structure, risks drawing misleading conclusions and directing strategy in the wrong direction.
 
-A weaker answer would usually miss the final point about **context** and simply say that “some firms have high margins and others have high turnover.” The stronger answer explains why that matters for executive decision-making.
+**A strong answer will include all four of these elements. Use this checklist when reviewing student responses:**
 
+- [ ] Identifies what was analysed and names specific industries as examples
+- [ ] Notes that industries differ on margin vs. turnover, **and gives economic reasoning for why** — e.g. pricing power / scarce resources / intangible scale for high-margin industries; volume / asset-light models for high-turnover industries
+- [ ] **Notes that the tradeoff is a tendency, not a universal rule** — e.g. professional services performs reasonably well on both
+- [ ] Closes with a specific, actionable executive takeaway — **not just "don't use one metric" but "metrics must be interpreted relative to how that industry creates value"**
+
+**A weaker answer typically:**
+
+- [ ] Describes the code or process rather than the findings
+- [ ] Names the pattern without explaining the economic reasoning behind it
+- [ ] Ends with a vague takeaway that does not guide executive action
+- [ ] Misses the nuance that the tradeoff is not universal across all industries
 
 
 :::
