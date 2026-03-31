@@ -84,11 +84,11 @@ Solution
 
 Here is one strong example of the kind of answer we are aiming for.
 
-> We analysed how the 200 largest ASX-listed firms generate performance, focusing on profit margin and asset turnover across industries.
+> We analysed how the 200 largest ASX-listed firms generate performance by examining profit margins and asset turnover across their 2024 financial statements.
 >
-> Industries tend to generate strong performance in one of two ways. Some — such as mining, building products, and software — earn a large share of each sales dollar as profit, often because of pricing power, scarce resources, or the economics of scaling intangible products. Others — such as retail, construction, and distribution — generate large sales relative to their asset base by operating at high volume or through asset-light business models. A small number of industries, such as professional services, perform reasonably well on both.
+> Industries tend to generate strong performance in one of two ways. Some — such as mining and software — earn a large share of each sales dollar as profit, often because of pricing power or the economics of scaling intangible products. Others — such as retail and distribution — generate large sales relative to their asset base by operating at high volume or through asset-light business models.
 >
-> The main business lesson is that performance metrics need to be interpreted in the context of how an industry creates value. Benchmarking firms or setting targets using a single metric in isolation, without accounting for industry structure, risks drawing misleading conclusions and directing strategy in the wrong direction.
+> The key lesson is that benchmarking firms using a single metric in isolation, without accounting for these industry structures, risks drawing misleading conclusions and steering corporate strategy in the wrong direction.
 
 **A strong answer will include all four of these elements. Use this checklist when reviewing student responses:**
 
