@@ -17,6 +17,7 @@ Your table should include:
 
 ```{r}
 #| eval: false
+
 firm_strategy |>
     slice_max(YOUR_CODE_HERE) |>
     select(YOUR_VARIABLES_HERE)
@@ -48,6 +49,8 @@ Teaching Note
 :::
 
 ::: {.teaching-block-body}
+
+The last code chunk prior to the in-class exercises will load the correct `firm_strategy` dataset. It's not visible in the html file, but should be in the .qmd file. Students who haven't prepared correctly (and tutors) can run this cell to proceed directly to the in-class exercises.
 
 🎯 **Learning Objective**
 

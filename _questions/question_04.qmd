@@ -34,6 +34,17 @@ firm_strategy_check |>
 
 **(d).** Looking at a few rows is a useful first step, but it might not scale well to a large dataset where we compute hundreds of variables. What might be a more scalable next step if you wanted to check whether `profit_margin` and `asset_turnover` look reasonable across all firms?
 
+```{r}
+#| eval: false
+#| include: false
+
+unprepared = T
+if(unprepared){
+  unprepared <- 
+    read_csv("data/firm_strategy.csv")
+}
+```
+
 <!-- BEGIN PROFILE:r-teaching-guide -->
 
 ::: {.content-visible when-profile="r-teaching-guide"}

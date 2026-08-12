@@ -1,0 +1,272 @@
+## Key R functions used in this notebook
+
+This page collects every new R function you used in this tutorial, in one place, as a quick-reference glossary. Each function below follows the same format:
+
+- **Package:** where the function comes from. Most functions in this tutorial come from **dplyr**, a package for wrangling data, or **ggplot2**, a package for making charts. A few are **Base R** (built into R, no setup needed). Add-on packages must be loaded first with `library()` before you can use them.
+- **What it does:** a plain-English explanation, no jargon.
+- **Why you'd use it:** the everyday analyst reason you'd reach for it.
+- **Arguments:** the inputs you put inside the parentheses `()` to tell the function exactly what to work on. Some are required, some are optional. Arguments listed here are not necessarily exhaustive.
+- **Example:** the function used on this week's `firm_strategy` or `industry_summary` data.
+
+For more information on any function, use ?`function_name` in the R console (e.g. `?filter`) to see the official documentation, which includes a full list of arguments, descriptions, and often many examples.
+
+### `filter()`
+
+**Package:** dplyr
+
+**What it does:** Keeps only the rows that meet a condition you set, and drops the rest.
+
+**Why you'd use it:** To narrow your dataset down to just the observations that make sense for your analysis, for example, only keeping firms where a ratio can be calculated sensibly.
+
+**Arguments:**
+
+- `...` — one or more conditions the kept rows must satisfy, such as `sale > 0`. You can list several conditions separated by commas; a row is kept only if all of them are true.
+
+**Example:**
+
+```{r}
+#| eval: false
+# Keep only firms with strictly positive sales and assets
+firm_strategy <-
+  asx_data |>
+  filter(sale > 0, at > 0)
+```
+
+### `mutate()`
+
+**Package:** dplyr
+
+**What it does:** Creates a new column in your data, or changes an existing one, based on a calculation you specify.
+
+**Why you'd use it:** To build new variables from ones you already have, like turning raw financial figures into ratios.
+
+**Arguments:**
+
+- `...` — one or more `name = calculation` pairs. `name` is what you want to call the new column, and `calculation` is the formula that creates it, such as `profit_margin = ebit / sale`.
+
+**Example:**
+
+```{r}
+#| eval: false
+firm_strategy <-
+  asx_data |>
+  filter(sale > 0, at > 0) |>
+  mutate(
+    profit_margin = ebit / sale,
+    asset_turnover = sale / at
+  )
+```
+
+### `select()`
+
+**Package:** dplyr
+
+**What it does:** Keeps only the columns you name, and drops the rest.
+
+**Why you'd use it:** To create a smaller, easier-to-read version of your data with just the variables you need, for example when checking that new calculations look right.
+
+**Arguments:**
+
+- `...` — the names of the columns you want to keep, separated by commas, such as `conml, ebit, at, sale`.
+
+**Example:**
+
+```{r}
+#| eval: false
+firm_strategy_check <-
+  firm_strategy |>
+  select(conml, ebit, at, sale, profit_margin, asset_turnover)
+```
+
+### `arrange()`
+
+**Package:** dplyr
+
+**What it does:** Sorts the rows of your data by one or more columns.
+
+**Why you'd use it:** To rank observations from lowest to highest, or highest to lowest with `desc()`, so you can see which rows stand out.
+
+**Arguments:**
+
+- `...` — the column(s) to sort by. By default, sorting goes from lowest to highest; wrap a column in `desc()` to sort from highest to lowest.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary |>
+  filter(n_firms >= 3) |>
+  arrange(desc(avg_profit_margin))
+```
+
+### `slice_max()`
+
+**Package:** dplyr
+
+**What it does:** Keeps only the rows with the highest values of a column you choose.
+
+**Why you'd use it:** To quickly pull out the top performers, for example the five firms with the highest profit margin.
+
+**Arguments:**
+
+- `order_by` — the column whose highest values you want, such as `profit_margin`.
+- `n` — how many rows to keep, such as `n = 5`.
+
+**Example:**
+
+```{r}
+#| eval: false
+firm_strategy |>
+  slice_max(profit_margin, n = 5) |>
+  select(conml, industry, profit_margin, asset_turnover)
+```
+
+### `group_by()`
+
+**Package:** dplyr
+
+**What it does:** Splits your data into groups based on the values of one or more columns, without changing what the data looks like on screen.
+
+**Why you'd use it:** To set up the data so that a later step, usually `summarise()`, calculates results separately for each group, such as each industry.
+
+**Arguments:**
+
+- `...` — the column(s) to group by, such as `industry`.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary <-
+  firm_strategy |>
+  group_by(industry)
+```
+
+### `summarise()`
+
+**Package:** dplyr
+
+**What it does:** Collapses many rows into a single summary row, using calculations you choose, such as an average.
+
+**Why you'd use it:** To go from firm-level detail to industry-level patterns, condensing hundreds of rows into one row per group.
+
+**Arguments:**
+
+- `...` — one or more `name = calculation` pairs, such as `avg_profit_margin = mean(profit_margin, na.rm = TRUE)`. If the data was grouped with `group_by()` first, one row is produced per group.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary <-
+  firm_strategy |>
+  group_by(industry) |>
+  summarise(
+    n_firms = n(),
+    avg_profit_margin = mean(profit_margin, na.rm = TRUE),
+    avg_asset_turnover = mean(asset_turnover, na.rm = TRUE)
+  )
+```
+
+### `slice_head()`
+
+**Package:** dplyr
+
+**What it does:** Shows the first few rows of your data, in the order they currently appear.
+
+**Why you'd use it:** To preview a dataset without printing every row, handy for checking that a new variable looks right.
+
+**Arguments:**
+
+- `n` — how many rows to show, such as `n = 10`.
+
+**Example:**
+
+```{r}
+#| eval: false
+firm_strategy_check |>
+  slice_head(n = 10)
+```
+
+### `n()`
+
+**Package:** dplyr
+
+**What it does:** Counts how many rows are in the current group.
+
+**Why you'd use it:** Used inside `summarise()` to record how many observations, such as firms, make up each group.
+
+**Arguments:**
+
+- none. `n()` takes no arguments; it simply counts the rows it is given.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary <-
+  firm_strategy |>
+  group_by(industry) |>
+  summarise(n_firms = n())
+```
+
+### `mean()`
+
+**Package:** Base R
+
+**What it does:** Calculates the average of a set of numbers.
+
+**Why you'd use it:** To summarise a whole column of values, such as profit margin, with a single typical value.
+
+**Arguments:**
+
+- `x` — the numeric column you want to average, such as `profit_margin`.
+- `na.rm` — *(optional)* set to `TRUE` to ignore missing values when calculating the average. If you leave this out and there are missing values, the result will be `NA`.
+
+**Example:**
+
+```{r}
+#| eval: false
+mean(firm_strategy$profit_margin, na.rm = TRUE)
+```
+
+### `desc()`
+
+**Package:** dplyr
+
+**What it does:** Flags a column so that `arrange()` sorts it from highest to lowest instead of lowest to highest.
+
+**Why you'd use it:** To rank firms or industries from best to worst on a chosen measure, such as ranking industries from highest to lowest average profit margin.
+
+**Arguments:**
+
+- `x` — the column you want sorted in descending order, such as `avg_profit_margin`.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary |>
+  arrange(desc(avg_profit_margin))
+```
+
+### `geom_point()`
+
+**Package:** ggplot2
+
+**What it does:** Adds a layer of points to a plot, creating a scatter plot.
+
+**Why you'd use it:** To see the relationship between two numeric variables, such as average profit margin and average asset turnover across industries.
+
+**Arguments:**
+
+- none used in this tutorial. `geom_point()` is added on its own, using the x and y mapping already set in `aes()`.
+
+**Example:**
+
+```{r}
+#| eval: false
+industry_summary |>
+  ggplot(aes(x = avg_profit_margin, y = avg_asset_turnover)) +
+  geom_point()
+```

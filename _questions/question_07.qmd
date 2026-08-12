@@ -3,7 +3,7 @@
 
 Imagine you work at a large consulting company that is preparing an annual report on the financial results of Australian firms.
 
-Your team has been asked to analyse how large Australian listed firms generate strong results across different industries. As part of this project, you need to present an interim result to the executives overseeing the report.
+Your team has been asked to analyse how large Australian listed firms generate strong results, with a strong focus on differences across industries. As part of this project, you need to present an interim result to the executives overseeing the report.
 
 Write 3–4 sentences that could appear in the interim report's executive summary.
 
@@ -47,8 +47,8 @@ Students should:
 
 💬 **Suggested In-Class Prompts**
 
-* What is the difference between reporting a result and reporting a command?
 * What were the two clearest patterns from Exercises 5 and 6?
+* What kinds of industries tend to have high margins, and what kinds tend to have high turnover? Whay drives these differences?
 * Why is it misleading to assume that every strong firm should look the same?
 * What would the executives misunderstand if they focused only on profit margin?
 * What would they miss if they focused only on asset turnover?

@@ -70,6 +70,7 @@ Students should:
 
 * use `group_by()` and `summarise()` to calculate group-level averages
 * understand that grouped summaries help us move from individual firms to broader industry patterns
+* be able to broadly describe how industries can differ in their business models
 * interpret average profit margin, asset turnover, and ROIC at the industry level
 * connect industry-level averages to the firm-level patterns they observed in Exercise 5
 
@@ -91,7 +92,7 @@ Students should:
 * In plain language, what does a high standard deviation tell us about an industry?
 * What does a low standard deviation tell us?
 * Which industries appear to be more margin-driven on average?
-* Which appear to be more turnover-driven on average?
+* Which appear to be more turnover-driven on average? 
 * Why might some industries rank highly on one measure but not the other?
 
 📌 **Common Misunderstandings**
