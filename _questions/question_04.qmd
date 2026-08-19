@@ -38,9 +38,10 @@ firm_strategy_check |>
 #| eval: false
 #| include: false
 
+library(tidyverse)
 unprepared = T
 if(unprepared){
-  unprepared <- 
+  firm_strategy <- 
     read_csv("data/firm_strategy.csv")
 }
 ```
